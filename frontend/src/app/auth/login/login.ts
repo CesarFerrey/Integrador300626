@@ -25,7 +25,7 @@ export class Login {
     private readonly router: Router = inject(Router);
 
     readonly form: FormGroup = new FormGroup({
-        nombre: new FormControl("", [Validators.required]),
+        nombre: new FormControl("", [Validators.required, Validators.email]),
         clave: new FormControl("", [Validators.required])
     });
 
