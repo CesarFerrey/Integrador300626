@@ -1,0 +1,116 @@
+<p-dialog
+    [header]="header()"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '32rem' }"
+    (onHide)="cerrarDialog()"
+    [draggable]="false"
+    [resizable]="false"
+>
+
+    <form [formGroup]="form" (ngSubmit)="guardarCliente()" class="p-fluid">
+
+        <div class="flex flex-column gap-3">
+
+          
+            <div class="flex flex-column gap-1">
+                <label for="nombre">Nombre *</label>
+                <input
+                    pInputText
+                    id="nombre"
+                    formControlName="nombre"
+                    placeholder="Ej: Juan Pérez"
+                />
+                @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                    <small class="p-error">El nombre es obligatorio</small>
+                }
+            </div>
+
+          
+            <div class="flex flex-column gap-1">
+                <label for="email">Email</label>
+                <input
+                    pInputText
+                    id="email"
+                    formControlName="email"
+                    placeholder="Ej: correo@ejemplo.com"
+                />
+                @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                    <small class="p-error">Email inválido</small>
+                }
+            </div>
+
+          
+            <div class="flex flex-column gap-1">
+                <label for="telefono">Teléfono</label>
+                <input
+                    pInputText
+                    id="telefono"
+                    formControlName="telefono"
+                    placeholder="Ej: 343 123 4567"
+                />
+            </div>
+
+         
+            @if (clienteSeleccionado()) {
+                <div class="flex flex-column gap-1">
+                    <label for="estado">Estado</label>
+                    <!--<p-select
+                        id="estado"
+                        formControlName="estado"
+                        [options]="estados()"
+                        placeholder="Seleccionar estado"
+                        appendTo="body"
+                    />-->
+
+                    <!--<select
+                        id="estado"
+                        formControlName="estado"
+                        [options]="estados()"
+                        placeholder="Seleccionar estado"
+                        appendTo="body"
+                        [checkmark]="true">
+                    </select>-->
+
+                    <select id="estado" formControlName="estado">
+
+                        <option value="ACTIVO">
+                            ACTIVO
+                        </option>
+                    
+                        <option value="BAJA">
+                            BAJA
+                        </option>
+                    
+                    </select>
+                    
+                    <p>Estado actual: {{ form.get('estado')?.value }}</p>
+                   
+                </div>
+            }
+
+        </div>
+
+      
+        <div class="flex justify-content-end gap-2 mt-4">
+
+            <button
+                pButton
+                type="button"
+                label="Cancelar"
+                class="p-button-secondary"
+                (click)="cerrarDialog()"
+            ></button>
+
+            <button
+                pButton
+                type="submit"
+                label="Guardar"
+                icon="pi pi-check"
+            ></button>
+
+        </div>
+
+    </form>
+
+</p-dialog>

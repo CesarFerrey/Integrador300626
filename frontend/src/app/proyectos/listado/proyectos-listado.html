@@ -1,0 +1,157 @@
+<app-template>
+
+    <div class="page-container">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Proyectos</h1>
+
+                <p class="descripcion">
+                    Administre sus proyectos, clientes y tareas desde un único lugar.
+                </p>
+            </div>
+
+            <div class="acciones-superiores">
+
+                <p-button
+                    icon="pi pi-plus"
+                    label="Crear Proyecto"
+                    severity="success"
+                    (click)="crearProyecto()">
+                </p-button>
+
+                <div class="toolbar-filtros">
+
+                    <div class="search-box">
+                        <i class="pi pi-search"></i>
+                
+                        <input
+                            type="text"
+                            placeholder="Buscar proyecto..."
+                            (input)="filtrarProyectos($event)">
+                    </div>
+                
+                    <div class="filtro-cliente">
+                        <select (change)="filtrarEstado($event)">
+                            <option value="">Todos</option>
+                            <option value="ACTIVO">Activo</option>
+                            <option value="FINALIZADO">Finalizado</option>
+                            <option value="BAJA">Baja</option>
+                        </select>
+                    </div>
+                
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="table-card">
+
+            <div class="tabla-info">
+                Mostrando {{ proyectosFiltrados().length }} proyectos
+            </div>
+
+            <p-table
+                id="tabla"
+                [value]="proyectosFiltrados()"
+                [tableStyle]="{ 'min-width': '50rem'}"
+
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[5,10,20]"
+
+                [scrollable]="true"
+                scrollHeight="70vh">
+                
+                <ng-template #header>
+                    <tr>
+                        <th class="col-nombre">Nombre</th>
+                        <th class="col-cliente">Cliente</th>
+                        <th class="col-estado">Estado</th>
+                        <th class="col-fecha">Fecha límite</th>
+                        <th class="col-acciones sticky-col">Acciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-proyecto>
+                    <tr>
+
+                        <td class="col-nombre">
+                            {{ proyecto.nombre }}
+                        </td>
+
+                        <td class="col-cliente">
+                            {{ proyecto.cliente ? proyecto.cliente.nombre : '' }}
+                        </td>
+
+                        <td class="col-estado">
+                            <span
+                                class="estado"
+                                [class.activo]="proyecto.estado === 'ACTIVO'"
+                                [class.finalizado]="proyecto.estado === 'FINALIZADO'"
+                                [class.baja]="proyecto.estado === 'BAJA'">
+
+                                {{ proyecto.estado }}
+
+                            </span>
+                        </td>
+
+                        <td class="col-fecha">
+                            <span
+                                [class.fecha-ok]="proyecto.fechaFin"
+                                [class.fecha-vacia]="!proyecto.fechaFin">
+
+                                {{ proyecto.fechaFin ? (proyecto.fechaFin | date:'dd/MM/yyyy') : 'Sin fecha' }}
+
+                            </span>
+                        </td>
+
+                        <td class="col-acciones acciones sticky-col">
+
+                            <div class="acciones-botones">
+                        
+                                <p-button
+                                    icon="pi pi-list"
+                                    [text]="true"
+                                    severity="secondary"
+                                    pTooltip="Gestionar Tareas"
+                                    (click)="gestionarTareas(proyecto)">
+                                </p-button>
+                            
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    [text]="true"
+                                    severity="secondary"
+                                    pTooltip="Editar Proyecto"
+                                    (click)="editarProyecto(proyecto)">
+                                </p-button>
+                        
+                            </div>
+                        
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="5">
+                            No se encontraron proyectos.
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+
+        </div>
+
+    </div>
+
+</app-template>
+
+<app-gestion-proyecto
+    [(visible)]="dialogVisible"
+    [(proyectoSeleccionado)]="proyectoSeleccionado">
+</app-gestion-proyecto>

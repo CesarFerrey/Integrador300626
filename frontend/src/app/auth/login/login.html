@@ -1,0 +1,58 @@
+<form [formGroup]="form" class="login-page">
+
+    <div class="login-card">
+
+        <div class="login-header">
+
+            <div class="logo">
+                🚀
+            </div>
+
+            <h1>Gestión de Proyectos</h1>
+
+            <p>
+                Inicia sesión para acceder al sistema
+            </p>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="nombre">
+                Usuario
+            </label>
+
+            <input
+                pInputText
+                id="nombre"
+                type="text"
+                placeholder="Ingresa tu usuario"
+                formControlName="nombre" />
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="clave">
+                Contraseña
+            </label>
+
+            <p-password
+                id="clave"
+                formControlName="clave"
+                [feedback]="false"
+                autocomplete="off"
+                placeholder="Ingresa tu contraseña">
+            </p-password>
+
+        </div>
+
+        <p-button
+            label="Iniciar sesión"
+            icon="pi pi-sign-in"
+            (click)="iniciarSesion()">
+        </p-button>
+
+    </div>
+
+</form>

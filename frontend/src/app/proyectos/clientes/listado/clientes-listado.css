@@ -1,0 +1,207 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.page-header h1 {
+    margin: 0 0 6px 0;
+}
+
+.descripcion {
+    margin: 0;
+    color: #64748b;
+    font-size: 15px;
+}
+
+.acciones-superiores {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.toolbar-filtros {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    width: 320px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+
+.filtro-cliente select {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+}
+
+:host ::ng-deep .p-datatable {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr:hover {
+    background: #f8fafc;
+    transition: .2s;
+}
+
+:host ::ng-deep .p-datatable td {
+    padding: 12px 14px;
+}
+
+#tabla {
+    margin-top: 1rem;
+}
+
+.table-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}
+
+.tabla-info {
+    margin-bottom: 12px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.acciones {
+    text-align: center;
+}
+
+.acciones-botones {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr:hover .acciones-botones {
+    opacity: 1;
+}
+
+:host ::ng-deep .p-button {
+    border-radius: 8px;
+}
+
+:host ::ng-deep .p-button:hover {
+    transform: scale(1.05);
+    transition: .15s;
+}
+
+.estado {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 90px;
+    justify-content: center;
+}
+
+.activo {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.baja {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.col-nombre {
+    width: 30%;
+}
+
+.col-email {
+    width: 30%;
+}
+
+.col-telefono {
+    width: 20%;
+}
+
+.col-estado {
+    width: 10%;
+    text-align: center;
+}
+
+.col-acciones {
+    width: 10%;
+    text-align: center;
+}
+
+.col-nombre {
+    width: 28%;
+    font-weight: 600;
+    color: #1e293b;
+    text-align: left;
+}
+
+.col-email {
+    width: 30%;
+    text-align: left;
+}
+
+.col-telefono {
+    width: 18%;
+    text-align: center;
+}
+
+.col-estado {
+    width: 12%;
+    text-align: center;
+}
+
+.col-acciones {
+    width: 12%;
+    text-align: center;
+}
+
+
+:host ::ng-deep .sticky-col {
+    position: sticky;
+    right: 0;
+    background: white;
+    z-index: 3;
+    box-shadow: -4px 0 10px rgba(0,0,0,.06);
+}
+
+:host ::ng-deep .p-datatable-tbody td.sticky-col {
+    border-left: 1px solid #e2e8f0;
+}

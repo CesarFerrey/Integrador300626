@@ -1,0 +1,228 @@
+<app-template>
+
+        <div class="page-header">
+            <h1>Gestión de Tareas</h1>
+        
+            <p>
+                Administre las tareas y el avance del proyecto.
+            </p>
+        </div>
+        
+        <section class="resumen-proyecto">
+        
+            <div class="info-card proyecto">
+                <span class="label">Proyecto</span>
+                <strong>{{ proyecto()?.nombre }}</strong>
+            </div>
+        
+            @if (proyecto()?.cliente ) {
+                <div class="info-card">
+                    <span class="label">Cliente</span>
+                    <strong>{{ proyecto()?.cliente }}</strong>
+                </div>
+            }
+        
+            <div class="info-card">
+                <span class="label">Estado</span>
+        
+                <strong
+                    [ngClass]="{
+                        'estado-activo': proyecto()?.estado === 'ACTIVO',
+                        'estado-finalizado': proyecto()?.estado === 'FINALIZADO',
+                        'estado-baja': proyecto()?.estado === 'BAJA'
+                    }">
+        
+                    {{ proyecto()?.estado }}
+        
+                </strong>
+            </div>
+        
+            <div class="info-card">
+                <span class="label">Total tareas</span>
+                <strong>{{ tareas().length }}</strong>
+            </div>
+        
+            <div class="info-card">
+                <span class="label">Finalizadas</span>
+                <strong>{{ tareasFinalizadas() }}</strong>
+            </div>
+        
+            <div class="info-card">
+                <span class="label">Pendientes</span>
+                <strong>{{ tareasPendientes() }}</strong>
+            </div>
+        
+        </section>
+        
+        <div class="avance-container">
+        
+            <div class="avance-header">
+                <span>Avance del proyecto</span>
+                <strong>{{ porcentajeAvance() }}%</strong>
+            </div>
+        
+            <p-progressBar
+                [value]="porcentajeAvance()">
+            </p-progressBar>
+        
+        </div>
+        
+        <div class="acciones-tareas">
+        
+            <p-button
+                icon="pi pi-plus"
+                label="Crear Tarea"
+                severity="success"
+                (click)="crearTarea()">
+            </p-button>
+        
+            <div class="filtro-container">
+        
+                <label for="filtroEstado">
+                    Estado:
+                </label>
+        
+                <select
+                    id="filtroEstado"
+                    (change)="cambiarFiltro($event)">
+        
+                    <option value="TODAS">TODAS</option>
+                    <option value="PENDIENTE">PENDIENTE</option>
+                    <option value="FINALIZADA">FINALIZADA</option>
+                    <option value="BAJA">BAJA</option>
+        
+                </select>
+        
+            </div>
+        
+        </div>
+        
+        <div class="kanban-board">
+        
+            <div class="kanban-column">
+        
+                <h3>
+                    Pendientes ({{ tareasKanbanPendientes().length }})
+                </h3>
+        
+                @for (tarea of tareasKanbanPendientes(); track tarea.id) {
+        
+                    <div class="kanban-card">
+                        <strong>{{ tarea.descripcion }}</strong>
+                    </div>
+        
+                }
+        
+            </div>
+        
+            <div class="kanban-column">
+        
+                <h3>
+                    Finalizadas ({{ tareasKanbanFinalizadas().length }})
+                </h3>
+        
+                @for (tarea of tareasKanbanFinalizadas(); track tarea.id) {
+        
+                    <div class="kanban-card">
+                        <strong>{{ tarea.descripcion }}</strong>
+                    </div>
+        
+                }
+        
+            </div>
+        
+            <div class="kanban-column">
+
+                <h3>
+                    🔴 Baja ({{ tareasKanbanBaja().length }})
+                </h3>
+            
+                @for (tarea of tareasKanbanBaja(); track tarea.id) {
+            
+                    <div class="kanban-card">
+            
+                        <strong>{{ tarea.descripcion }}</strong>
+            
+                    </div>
+            
+                }
+
+                @if (tareasKanbanBaja().length === 0) {
+
+                    <p class="sin-tareas">
+                        Sin tareas
+                    </p>
+            
+                }
+            
+            </div>
+
+                
+        
+
+        </div>
+
+        <h2 class="titulo-seccion">
+            Listado de tareas
+        </h2>
+        
+        <p-table
+            id="tabla"
+            [value]="tareasFiltradas()"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [scrollable]="true"
+            scrollHeight="50vh">
+        
+            <ng-template #header>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+        
+            <ng-template #body let-tarea>
+                <tr>
+                    <td>{{ tarea.descripcion }}</td>
+        
+                    <td>
+                        <span
+                            class="estado-badge"
+                            [ngClass]="{
+                                'pendiente': tarea.estado === 'PENDIENTE',
+                                'finalizada': tarea.estado === 'FINALIZADA',
+                                'baja': tarea.estado === 'BAJA'
+                            }">
+        
+                            {{ tarea.estado }}
+        
+                        </span>
+                    </td>
+        
+                    <td>
+                        <p-button
+                            icon="pi pi-pencil"
+                            pTooltip="Editar Tarea"
+                            (click)="editarTarea(tarea)">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="3">
+                        No se encontraron tareas.
+                    </td>
+                </tr>
+            </ng-template>
+        
+        </p-table>
+       
+        </app-template>
+        
+        <app-gestion-tarea
+        [(visible)]="dialogVisible"
+        [idProyecto]="idProyecto()"
+        [(tareaSeleccionada)]="tareaSeleccionada"> </app-gestion-tarea>
+        
