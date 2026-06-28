@@ -1,18 +1,17 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = sessionStorage.getItem('accessToken'); 
   
-  if (req.url.includes('/login') || req.url.includes('/auth')) {
+  // SOLO excluye login/registrar
+  if (req.url.includes('/login') || req.url.includes('/registrar')) {
     return next(req);
   }
 
-  const token = sessionStorage.getItem('accessToken'); 
-
+  // SIEMPRE añade el token si existe
   if (token) {
     const clonedReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
     return next(clonedReq);
   }

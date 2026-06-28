@@ -20,7 +20,6 @@ const list_cliente_dto_1 = require("../dtos/output/list-cliente.dto");
 const update_cliente_dto_1 = require("../dtos/input/update-cliente.dto");
 const estados_clientes_enum_1 = require("../enums/estados-clientes.enum");
 const clientes_service_1 = require("../services/clientes.service");
-const auth_guard_1 = require("../../auth/guards/auth.guard");
 let ClientesController = class ClientesController {
     clientesService;
     constructor(clientesService) {
@@ -39,7 +38,6 @@ let ClientesController = class ClientesController {
 exports.ClientesController = ClientesController;
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -48,9 +46,8 @@ __decorate([
 ], ClientesController.prototype, "crearCliente", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    (0, common_1.Put)(":id"),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, update_cliente_dto_1.UpdateClienteDto]),
@@ -62,11 +59,10 @@ __decorate([
     (0, swagger_1.ApiQuery)({
         name: 'estado',
         required: false,
-        enum: estados_clientes_enum_1.EstadosClientesEnum
+        enum: estados_clientes_enum_1.EstadosClientesEnum,
     }),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)("estado")),
+    __param(0, (0, common_1.Query)('estado')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

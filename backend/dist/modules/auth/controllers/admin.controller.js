@@ -20,12 +20,22 @@ let AdminController = class AdminController {
     constructor(usuariosService) {
         this.usuariosService = usuariosService;
     }
+    async buscarUsuarios(criterio) {
+        return await this.usuariosService.buscarUsuariosFiltrados(criterio);
+    }
     async activarUsuario(id) {
         await this.usuariosService.activarUsuario(id);
         return;
     }
 };
 exports.AdminController = AdminController;
+__decorate([
+    (0, common_1.Get)('buscar'),
+    __param(0, (0, common_1.Query)('criterio')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "buscarUsuarios", null);
 __decorate([
     (0, common_1.Put)(':id/activar'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

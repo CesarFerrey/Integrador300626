@@ -56,17 +56,11 @@ let AuthService = class AuthService {
     }
     async login(dto) {
         const email = dto.email.toLowerCase().trim();
-        console.log('Datos recibidos:', {
-            email,
-            clave: dto.clave,
-        });
-        const usuario = await this.usuariosService.buscarUsuarioActivoPorNombre(email);
-        console.log('Usuario encontrado:', usuario);
+        const usuario = await this.usuariosService.buscarPorEmail(email);
         if (!usuario) {
             throw new common_1.UnauthorizedException('Usuario no encontrado');
         }
         const isMatch = await bcrypt.compare(dto.clave, usuario.clave);
-        console.log('Coincide contraseña?', isMatch);
         if (!isMatch) {
             throw new common_1.UnauthorizedException('Contraseña incorrecta');
         }
@@ -79,12 +73,10 @@ let AuthService = class AuthService {
         };
     }
     async registrar(dto) {
-        const salt = await bcrypt.genSalt(10);
-        const claveEncriptada = await bcrypt.hash(dto.clave, salt);
         const usuarioNuevo = {
             nombre: dto.nombre,
             email: dto.email.toLowerCase().trim(),
-            clave: claveEncriptada,
+            clave: dto.clave,
             estado: 'ACTIVO',
         };
         return await this.usuariosService.crearUsuario(usuarioNuevo);

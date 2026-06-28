@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './controllers/auth.controller';
-import { AdminController } from './controllers/admin.controller'; // 1. IMPORTAR EL NUEVO CONTROLADOR
+import { AdminController } from './controllers/admin.controller';
+import { UsuariosController } from '../gestion/controllers/usuarios.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './entitites/usuario.entity';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,15 +11,14 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 
 @Module({
-  // 2. AGREGAR EL ADMINCONTROLLER A LA LISTA
-  controllers: [AuthController, AdminController],
+  // 2. AGREGAR EL USUARIOSCONTROLLER A LA LISTA
+  controllers: [AuthController, AdminController, UsuariosController],
   providers: [UsuariosService, AuthService, AuthGuard],
   imports: [
     TypeOrmModule.forFeature([Usuario]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       global: true,
-
       useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,
@@ -27,8 +27,6 @@ import { AuthGuard } from './guards/auth.guard';
       },
     }),
   ],
-  // 3. AGREGAR USUARIOSSERVICE A LOS EXPORTS
-  // (Para que otros módulos puedan usar la lógica de activación si lo necesitan)
   exports: [AuthGuard, UsuariosService],
 })
 export class AuthModule {}

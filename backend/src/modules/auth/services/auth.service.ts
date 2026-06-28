@@ -22,23 +22,15 @@ export class AuthService {
   }): Promise<{ accessToken: string }> {
     const email = dto.email.toLowerCase().trim();
 
-    console.log('Datos recibidos:', {
-      email,
-      clave: dto.clave,
-    });
-
-    const usuario =
-      await this.usuariosService.buscarUsuarioActivoPorNombre(email);
-
-    console.log('Usuario encontrado:', usuario);
+    const usuario = await this.usuariosService.buscarPorEmail(email);
 
     if (!usuario) {
       throw new UnauthorizedException('Usuario no encontrado');
     }
 
+    // Aquí comparamos la clave que llega del login (texto plano)
+    // contra el hash guardado en la base de datos.
     const isMatch = await bcrypt.compare(dto.clave, usuario.clave);
-
-    console.log('Coincide contraseña?', isMatch);
 
     if (!isMatch) {
       throw new UnauthorizedException('Contraseña incorrecta');
@@ -55,14 +47,10 @@ export class AuthService {
   }
 
   async registrar(dto: AuthDto): Promise<any> {
-    const salt = await bcrypt.genSalt(10);
-
-    const claveEncriptada = await bcrypt.hash(dto.clave, salt);
-
     const usuarioNuevo = {
       nombre: dto.nombre,
       email: dto.email.toLowerCase().trim(),
-      clave: claveEncriptada,
+      clave: dto.clave,
       estado: 'ACTIVO',
     };
 

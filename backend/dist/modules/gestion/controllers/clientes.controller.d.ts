@@ -1,8 +1,8 @@
-import { CreateClienteDto } from "../dtos/input/create-cliente.dto";
-import { ListClienteDTO } from "../dtos/output/list-cliente.dto";
-import { UpdateClienteDto } from "../dtos/input/update-cliente.dto";
-import { EstadosClientesEnum } from "../enums/estados-clientes.enum";
-import { ClientesService } from "../services/clientes.service";
+import { CreateClienteDto } from '../dtos/input/create-cliente.dto';
+import { ListClienteDTO } from '../dtos/output/list-cliente.dto';
+import { UpdateClienteDto } from '../dtos/input/update-cliente.dto';
+import { EstadosClientesEnum } from '../enums/estados-clientes.enum';
+import { ClientesService } from '../services/clientes.service';
 export declare class ClientesController {
     private readonly clientesService;
     constructor(clientesService: ClientesService);
