@@ -1,0 +1,137 @@
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <h1>Clientes</h1>
+
+            <p class="descripcion">
+                Administre sus clientes desde un único lugar.
+            </p>
+        </div>
+
+        <div class="acciones-superiores">
+
+            <p-button
+                icon="pi pi-plus"
+                label="Crear Cliente"
+                severity="success"
+                (click)="crearCliente()">
+            </p-button>
+
+            <div class="toolbar-filtros">
+
+                <div class="search-box">
+                    <i class="pi pi-search"></i>
+
+                    <input
+                        type="text"
+                        placeholder="Buscar cliente..."
+                        (input)="filtrarClientes($event)">
+                </div>
+
+                <div class="filtro-cliente">
+                    <select (change)="filtrarEstado($event)">
+                        <option value="">Todos</option>
+                        <option value="ACTIVO">Activo</option>
+                        <option value="BAJA">Baja</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="table-card">
+
+        <div class="tabla-info">
+            Mostrando {{ clientesFiltrados().length }} clientes
+        </div>
+
+        <p-table
+            id="tabla"
+            [value]="clientesFiltrados()"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5,10,20]"
+            [scrollable]="true"
+            scrollHeight="70vh"
+            styleClass="p-datatable-sm p-datatable-striped">
+
+            <ng-template #header>
+                <tr>
+                    <th class="col-nombre">Nombre</th>
+                    <th class="col-email">Email</th>
+                    <th class="col-telefono">Teléfono</th>
+                    <th class="col-estado">Estado</th>
+                    <th class="col-acciones sticky-col">Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-cliente>
+                <tr>
+
+                    <td class="col-nombre">
+                        {{ cliente.nombre }}
+                    </td>
+                    
+                    <td class="col-email">
+                        {{ cliente.email }}
+                    </td>
+                    
+                    <td class="col-telefono">
+                        {{ cliente.telefono }}
+                    </td>
+                    
+                    <td class="col-estado">
+
+
+                        <span
+                            class="estado"
+                            [class.activo]="cliente.estado === 'ACTIVO'"
+                            [class.baja]="cliente.estado === 'BAJA'">
+
+                            {{ cliente.estado }}
+
+                        </span>
+                    </td>
+
+                    <td class="col-acciones acciones sticky-col">
+
+                        <div class="acciones-botones">
+                    
+                            <button
+                                pButton
+                                icon="pi pi-pencil"
+                                class="p-button-rounded p-button-text p-button-sm"
+                                pTooltip="Editar Cliente"
+                                (click)="editarCliente(cliente)">
+                            </button>
+                    
+                        </div>
+                    
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="5" class="text-center p-4">
+                        No se encontraron clientes.
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+    </div>
+
+</div>
+
+<app-gestion-cliente
+    [(visible)]="dialogVisible"
+    [(clienteSeleccionado)]="clienteSeleccionado">
+</app-gestion-cliente>

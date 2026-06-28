@@ -1,0 +1,162 @@
+<div class="dashboard-header">
+
+    <div>
+        <h1>Dashboard</h1>
+
+        <p>
+            Visualiza el estado general de los proyectos y clientes.
+        </p>
+    </div>
+
+    <button
+        class="btn-exportar"
+        (click)="exportarCSV()">
+
+        <i class="pi pi-download"></i>
+        Exportar CSV
+
+    </button>
+
+</div>
+
+<div class="dashboard-info">
+
+    <p class="fecha-dashboard">
+        Actualizado: {{ fechaActualizacion }}
+    </p>
+
+</div>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h3>📁 Total proyectos</h3>
+        <h1>{{ totalProyectos() }}</h1>
+    </div>
+
+    <div class="card">
+
+        <h3>✔️ Activos</h3>
+    
+        <h1>{{ proyectosActivos() }}</h1>
+    
+        <div class="progress-bar">
+    
+            <div
+                class="progress-fill"
+                [style.width.%]="porcentajeActivos()">
+            </div>
+    
+        </div>
+    
+        <p class="detalle-card">
+            {{ porcentajeActivos() }}% del total
+        </p>
+    
+    </div>
+
+    <div class="card">
+
+        <h3>✅ Finalizados</h3>
+    
+        <h1>{{ proyectosFinalizados() }}</h1>
+    
+        <div class="progress-bar">
+    
+            <div
+                class="progress-fill finalizados"
+                [style.width.%]="porcentajeFinalizados()">
+            </div>
+    
+        </div>
+    
+        <p class="detalle-card">
+            {{ porcentajeFinalizados() }}% del total
+        </p>
+    
+    </div>
+
+    <div class="card">
+
+        <h3>🔴 Baja</h3>
+    
+        <h1>{{ proyectosBaja() }}</h1>
+    
+        <div class="progress-bar">
+    
+            <div
+                class="progress-fill baja"
+                [style.width.%]="porcentajeBaja()">
+            </div>
+    
+        </div>
+    
+        <p class="detalle-card">
+            {{ porcentajeBaja() }}% del total
+        </p>
+    
+    </div>
+
+    <div class="card clientes">
+        <h3>👥 Clientes</h3>
+        <h1>{{ clientesTotales() }}</h1>
+    </div>
+
+</div>
+
+<div class="graficos">
+
+    <div class="grafico-container">
+        <canvas id="graficoEstados"></canvas>
+    </div>
+
+    <div class="grafico-container">
+        <canvas id="graficoClientes"></canvas>
+    </div>
+
+</div>
+
+<div class="ultimos-proyectos">
+
+    <h3>Últimos proyectos</h3>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Proyecto</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @for (proyecto of proyectos.slice(0,5); track proyecto.id) {
+
+                <tr>
+                    <td>{{ proyecto.nombre }}</td>
+                    <td>{{ proyecto.cliente.nombre }}</td>
+                    <td>
+
+                        <span
+                            class="badge"
+                            [class.activo]="proyecto.estado === 'ACTIVO'"
+                            [class.baja]="proyecto.estado === 'BAJA'"
+                            [class.finalizado]="proyecto.estado === 'FINALIZADO'">
+                    
+                            {{ proyecto.estado }}
+                    
+                        </span>
+                    
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+

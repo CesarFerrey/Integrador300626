@@ -1,0 +1,263 @@
+/* =========================
+   LAYOUT GENERAL
+========================= */
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.page-header h1 {
+    margin: 0 0 6px 0;
+}
+
+.descripcion {
+    margin: 0;
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.acciones-superiores {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* =========================
+   FILTROS
+========================= */
+
+.filtros {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filtros input {
+    width: 320px;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.filtros select {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+}
+
+/* =========================
+   TABLA
+========================= */
+
+.table-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}
+
+:host ::ng-deep .p-datatable {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* hover limpio */
+:host ::ng-deep .p-datatable-tbody > tr:hover {
+    background-color: #f1f5f9;
+    transition: background-color 0.2s ease;
+}
+
+/* padding SaaS */
+:host ::ng-deep .p-datatable td {
+    padding: 10px 14px;
+}
+
+/* =========================
+   ESTADOS (BADGES)
+========================= */
+
+.estado {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.activo {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.finalizado {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.baja {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* =========================
+   ALINEACIÓN COLUMNAS
+========================= */
+
+.col-nombre {
+    text-align: left;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.col-cliente {
+    text-align: left;
+}
+
+.col-estado,
+.col-fecha,
+.col-acciones {
+    text-align: center;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+
+.acciones-botones {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+:host ::ng-deep .p-button {
+    border-radius: 8px;
+}
+
+/* botón específico */
+#boton-gestionar-tareas {
+    margin-right: 8px;
+}
+
+/* efecto hover sutil en botones */
+:host ::ng-deep .p-button:hover {
+    transform: scale(1.05);
+    transition: all 0.15s ease;
+  }
+
+/* =========================
+   FECHAS
+========================= */
+
+.fecha-ok {
+    color: #1e7e34;
+    font-weight: 500;
+}
+
+.fecha-vacia {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+:host ::ng-deep .sticky-col {
+    position: sticky;
+    right: 0;
+    background: white;
+    z-index: 3;
+  }
+
+  :host ::ng-deep .p-datatable-tbody td.sticky-col {
+    border-left: 1px solid #e2e8f0;
+  }
+
+  :host ::ng-deep .sticky-col {
+    position: sticky;
+    right: 0;
+    background: white;
+    z-index: 3;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.06);
+  }
+
+  .acciones-botones {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  :host ::ng-deep .p-datatable-tbody > tr:hover .acciones-botones {
+    opacity: 1;
+  }
+
+  :host ::ng-deep .p-datatable-tbody td {
+    vertical-align: middle;
+  }
+
+  /* barra general */
+.toolbar-filtros {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  
+  /* search estilo Jira */
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    width: 320px;
+  }
+  
+  .search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+  }
+  
+  /* select más moderno */
+  .filtro-cliente select {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+  }
+
+  .tabla-info {
+    margin-bottom: 12px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+}

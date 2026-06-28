@@ -1,0 +1,369 @@
+.dashboard {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.card {
+    width: 240px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.graficos{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.grafico-container{
+    width: 500px;
+    height: 400px;
+}
+
+#graficoEstados,
+#graficoClientes{
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.card:nth-child(1) {
+    border-left: 6px solid #0d6efd;
+}
+
+.card:nth-child(2) {
+    border-left: 6px solid #198754;
+}
+
+.card:nth-child(3) {
+    border-left: 6px solid #6c757d;
+}
+
+.card:nth-child(4) {
+    border-left: 6px solid #dc3545;
+}
+
+.card,
+.grafico-container {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 12px;
+}
+
+.titulo-dashboard{
+    text-align: center;
+    margin: 20px 0 30px 0;
+    color: #333;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.subtitulo-dashboard{
+    text-align: center;
+    color: #666;
+    margin-top: -15px;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.fecha-dashboard{
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 25px;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+    transition: 0.3s;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 18px 0;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.dashboard-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    transition: all .2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.estado-sistema {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 42px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.dashboard-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+}
+
+.dashboard-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.fecha-dashboard {
+    margin: 0;
+    color: #64748b;
+}
+
+.estado-sistema {
+    background: #dcfce7;
+    color: #166534;
+
+    padding: 8px 16px;
+
+    border-radius: 999px;
+
+    font-weight: 600;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card h1 {
+    font-size: 42px;
+    margin-top: 12px;
+}
+
+.acciones-dashboard {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+}
+
+.btn-exportar {
+    background: #16a34a;
+    color: white;
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.btn-exportar:hover {
+    background: #15803d;
+    transform: scale(1.05);
+}
+
+.grafico-container {
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+.chart-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 30px 0;
+}
+
+.dashboard-card.clientes {
+    border-left: 6px solid #8b5cf6;
+}
+
+.card.clientes {
+    border-left: 4px solid #8b5cf6;
+}
+
+.card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card h3 {
+    white-space: nowrap;
+    margin: 0;
+}
+
+.card h1 {
+    margin-top: 15px;
+    font-size: 42px;
+}
+
+.ultimos-proyectos {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+
+    max-width: 1200px;
+    margin: 30px auto 0 auto;
+}
+
+.ultimos-proyectos table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ultimos-proyectos th,
+.ultimos-proyectos td{
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.ultimos-proyectos th{
+    font-weight: 600;
+}
+
+.badge{
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.activo{
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.baja{
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge.finalizado{
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.ultimos-proyectos tbody tr:hover{
+    background: #f8fafc;
+    transition: .2s;
+}
+
+.ultimos-proyectos table{
+    font-size: 14px;
+}
+
+.detalle-card{
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #16a34a;
+    border-radius: 999px;
+    transition: width .5s ease;
+}
+
+.progress-fill.finalizados {
+    background: #6b7280;
+}
+
+.progress-fill.baja {
+    background: #dc2626;
+}
+
+.proximos-vencimientos {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+
+    max-width: 1200px;
+    margin: 30px auto 0 auto;
+}
+
+.proximos-vencimientos h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.vencimiento-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.vencimiento-item:last-child {
+    border-bottom: none;
+}
+
+.fecha-vencimiento {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.sin-vencimientos {
+    color: #16a34a;
+    font-weight: 600;
+}

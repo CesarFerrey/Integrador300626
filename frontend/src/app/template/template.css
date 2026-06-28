@@ -1,0 +1,22 @@
+
+#nombre-de-proyecto {
+    font-size: 1rem;
+}
+
+
+
+::ng-deep .p-button {
+    font-size: 0.8rem !important;
+}
+
+
+@media (min-width: 768px) {
+    #nombre-de-proyecto {
+        font-size: 1.5rem;
+    }
+
+    ::ng-deep .p-button {
+        font-size: 1rem !important;
+    }
+
+}
