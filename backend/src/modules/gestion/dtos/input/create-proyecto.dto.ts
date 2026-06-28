@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { IsDateString } from "class-validator";
 
 export class CreateProyectoDto {
 
@@ -13,13 +12,5 @@ export class CreateProyectoDto {
     @IsNumber()
     @IsOptional()
     idCliente!: number;
-
-    @ApiProperty({
-        required: false,
-        example: "2026-07-15"
-    })
-    @IsOptional()
-    @IsDateString()
-    fechaFin?: string;
 
 }

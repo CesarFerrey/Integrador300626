@@ -1,0 +1,1 @@
+{"version":3,"file":"create-proyecto.dto.js","sourceRoot":"","sources":["create-proyecto.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,qDAA6E;AAE7E,MAAa,iBAAiB;IAK1B,MAAM,CAAU;IAKhB,SAAS,CAAU;CAEtB;AAZD,8CAYC;AAPG;IAHC,IAAA,qBAAW,GAAE;IACb,IAAA,0BAAQ,GAAE;IACV,IAAA,4BAAU,GAAE;;iDACG;AAKhB;IAHC,IAAA,qBAAW,GAAE;IACb,IAAA,0BAAQ,GAAE;IACV,IAAA,4BAAU,GAAE;;oDACM"}

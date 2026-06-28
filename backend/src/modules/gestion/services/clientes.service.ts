@@ -37,21 +37,8 @@ export class ClientesService {
             throw new BadRequestException('No se puede dar de baja un cliente con proyectos relacionados');
         }
 
-        /*this.repository.merge(cliente, dto);
-        await this.repository.save(cliente);*/
-
-        try {
-
-            this.repository.merge(cliente, dto);
-            await this.repository.save(cliente);
-        
-        } catch (error) {
-        
-            console.log('ERROR AL GUARDAR CLIENTE:');
-            console.log(error);
-        
-            throw error;
-        }
+        this.repository.merge(cliente, dto);
+        await this.repository.save(cliente);
     }
 
     async obtenerClientes(estado: EstadosClientesEnum): Promise<ListClienteDTO[]> {
@@ -62,16 +49,7 @@ export class ClientesService {
             whereCondition.estado = estado
         }
 
-        const clientes: Cliente[] = await this.repository.find({ select: { 
-            id: true, 
-            nombre: true,  
-            email: true,
-            telefono: true, 
-            estado: true 
-        }, 
-
-        order: { id: 'ASC' }, 
-        where: whereCondition });
+        const clientes: Cliente[] = await this.repository.find({ select: { id: true, nombre: true, estado: true }, order: { id: 'ASC' }, where: whereCondition });
 
         const dtoList: ListClienteDTO[] = [];
 
@@ -79,33 +57,11 @@ export class ClientesService {
             const dto = new ListClienteDTO();
             dto.id = c.id;
             dto.nombre = c.nombre;
-            dto.email = c.email;
-            dto.telefono = c.telefono;
             dto.estado = c.estado;
             dtoList.push(dto);
         }
 
         return dtoList;
-    }
-
-    async obtenerClientePorId(id: number): Promise<ListClienteDTO> {
-
-        const cliente = await this.repository.findOne({
-            where: { id }
-        });
-    
-        if (!cliente) {
-            throw new BadRequestException('Cliente no encontrado');
-        }
-    
-        const dto = new ListClienteDTO();
-        dto.id = cliente.id;
-        dto.nombre = cliente.nombre;
-        dto.email = cliente.email;
-        dto.telefono = cliente.telefono;
-        dto.estado = cliente.estado;
-    
-        return dto;
     }
 
     async existeClienteActivoPorId(id: number): Promise<boolean> {

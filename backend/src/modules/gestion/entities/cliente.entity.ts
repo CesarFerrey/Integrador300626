@@ -11,12 +11,6 @@ export class Cliente {
     @Column()
     nombre!: string;
 
-    @Column({ nullable: true })
-    email!: string;
-
-    @Column({ nullable: true })
-    telefono!: string;
-
     @Column({ type: 'enum', enum: EstadosClientesEnum })
     estado!: EstadosClientesEnum
 

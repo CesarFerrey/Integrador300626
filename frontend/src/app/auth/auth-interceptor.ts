@@ -1,22 +1,20 @@
-import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { Observable } from "rxjs/internal/Observable";
-import { AuthStore } from "./auth-store";
+import { HttpInterceptorFn } from '@angular/common/http';
 
-export function authInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> {
-
-  const authToken = inject(AuthStore).obtenerToken();
-
-  if (!authToken) {
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = sessionStorage.getItem('accessToken'); 
+  
+  // SOLO excluye login/registrar
+  if (req.url.includes('/login') || req.url.includes('/registrar')) {
     return next(req);
   }
 
-  const reqWithToken = req.clone({
-    headers: req.headers.set('Authorization', `Bearer ${authToken}`)
-  });
+  // SIEMPRE añade el token si existe
+  if (token) {
+    const clonedReq = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
+    });
+    return next(clonedReq);
+  }
 
-  return next(reqWithToken);
-}
+  return next(req);
+};

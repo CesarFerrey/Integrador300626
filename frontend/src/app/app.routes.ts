@@ -5,6 +5,8 @@ import { ProyectosListado } from './proyectos/listado/proyectos-listado';
 import { DashboardComponent } from './dashboard/dashboard';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { ClientesListado } from './proyectos/clientes/listado/clientes-listado';
+import { RecuperarPasswordComponent } from './auth/recuperar-password/recuperar-password.component'; // <--- 1. IMPORTA AQUÍ
+import { Register } from './auth/register/register';
 
 
 export const routes: Routes = [
@@ -13,18 +15,25 @@ export const routes: Routes = [
       path: 'login',
       component: Login
     },
-  
+    {
+        path: "registrar",
+        component: Register
+    },
+    {
+        path: "recuperar-password", // <--- 2. AGREGA LA RUTA AQUÍ
+        component: RecuperarPasswordComponent
+    },
     {
       path: '',
       component: MainLayout,
-  
+
       children: [
-  
+
         {
           path: 'dashboard',
           component: DashboardComponent
         },
-  
+
         {
           path: 'proyectos',
           component: ProyectosListado
@@ -34,18 +43,18 @@ export const routes: Routes = [
           path: 'clientes',
           component: ClientesListado
         },
-  
+
         {
           path: 'proyectos/:id/tareas',
           component: TareasListado
         }
-  
+
       ]
     },
-  
+
     {
       path: '**',
       redirectTo: 'login'
     }
-  
+
   ];

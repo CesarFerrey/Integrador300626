@@ -1,37 +1,21 @@
-/*import {  BadRequestException, Body, Controller, NotImplementedException, Post} from '@nestjs/common';
-import { LoginDto } from '../dtos/login.dto';
-import { AuthService } from "../services/auth.service";
+import { Body, Controller, Post } from '@nestjs/common';
+import { LoginDto } from '../dtos/input/login.dto';
+import { AuthService } from '../services/auth.service';
 
-
-@Controller("auth")
-
+@Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
-    constructor() {}
+  @Post('login')
+  async login(@Body() dto: LoginDto): Promise<{ accessToken: string }> {
+    return await this.authService.login(dto);
+  }
 
-    @Post("")
+  @Post('registrar')
+  async registrar(@Body() dto: any): Promise<any> {
 
-    async login(@Body() dto:LoginDto): Promise<{accessToken: string}>{ 
+    console.log('DATOS REGISTRO:', dto);
 
-        throw new NotImplementedException()
-
-}
-
-}*/
-
-import { BadRequestException, Body, Controller, NotImplementedException, Post } from "@nestjs/common";
-import { LoginDto } from "../dtos/login.dto";
-import { AuthService } from "../services/auth.service";
-
-@Controller("auth")
-export class AuthController{
-
-    constructor(private readonly authService: AuthService){}
-
-    @Post("")
-    async login(@Body() dto: LoginDto): Promise<{accessToken: string}>{
-        return await this.authService.login(dto);
-    }
-
-
+    return await this.authService.registrar(dto);
+  }
 }
