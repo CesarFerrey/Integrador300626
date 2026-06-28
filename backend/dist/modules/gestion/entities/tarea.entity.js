@@ -22,7 +22,7 @@ let Tarea = class Tarea {
 };
 exports.Tarea = Tarea;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: 'id' }),
     __metadata("design:type", Number)
 ], Tarea.prototype, "id", void 0);
 __decorate([
@@ -30,19 +30,19 @@ __decorate([
     __metadata("design:type", String)
 ], Tarea.prototype, "descripcion", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: "estado", type: "enum", enum: estados_tareas_enum_1.EstadosTareasEnum }),
+    (0, typeorm_1.Column)({ name: 'estado', type: 'enum', enum: estados_tareas_enum_1.EstadosTareasEnum }),
     __metadata("design:type", String)
 ], Tarea.prototype, "estado", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: "id_proyecto" }),
+    (0, typeorm_1.Column)({ name: 'id_proyecto' }),
     __metadata("design:type", Number)
 ], Tarea.prototype, "idProyecto", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => proyecto_entity_1.Proyecto),
-    (0, typeorm_1.JoinColumn)({ name: "id_proyecto" }),
+    (0, typeorm_1.JoinColumn)({ name: 'id_proyecto' }),
     __metadata("design:type", proyecto_entity_1.Proyecto)
 ], Tarea.prototype, "proyecto", void 0);
 exports.Tarea = Tarea = __decorate([
-    (0, typeorm_1.Entity)({ name: "tareas" })
+    (0, typeorm_1.Entity)({ name: 'tareas' })
 ], Tarea);
 //# sourceMappingURL=tarea.entity.js.map

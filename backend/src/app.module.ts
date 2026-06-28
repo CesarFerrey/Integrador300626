@@ -1,20 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { GestionModule } from './modules/gestion/gestion.module';
-
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [ConfigModule.forRoot({ 
-    isGlobal: true,
-  }),
-
-    AuthModule,
-    GestionModule,
-
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -22,19 +16,16 @@ import { GestionModule } from './modules/gestion/gestion.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       logging: process.env.DB_LOGGING === 'true',
       logger: 'advanced-console',
-  })],
-
-      
-  controllers: [AppController],
-  providers: [AppService],
-  exports: []
+    }),
+    AuthModule,
+    GestionModule,
+  ],
+  controllers: [],
+  providers: [],
+  exports: [],
 })
-export class AppModule {
-  
-  }
-
-
+export class AppModule {}

@@ -55,17 +55,31 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async login(dto) {
-        const usuario = await this.usuariosService.buscarUsuarioActivoPorNombre(dto.nombre);
+        const email = dto.email.toLowerCase().trim();
+        const usuario = await this.usuariosService.buscarPorEmail(email);
         if (!usuario) {
-            throw new common_1.UnauthorizedException("Usuario no encontrado");
+            throw new common_1.UnauthorizedException('Usuario no encontrado');
         }
-        if (!bcrypt.compareSync(dto.clave, usuario.clave)) {
-            throw new common_1.UnauthorizedException();
+        const isMatch = await bcrypt.compare(dto.clave, usuario.clave);
+        if (!isMatch) {
+            throw new common_1.UnauthorizedException('Contraseña incorrecta');
         }
-        const payload = { nombre: usuario.nombre, sub: usuario.id };
-        return {
-            accessToken: this.jwtService.sign(payload)
+        const payload = {
+            email: usuario.email,
+            sub: usuario.id,
         };
+        return {
+            accessToken: this.jwtService.sign(payload),
+        };
+    }
+    async registrar(dto) {
+        const usuarioNuevo = {
+            nombre: dto.nombre,
+            email: dto.email.toLowerCase().trim(),
+            clave: dto.clave,
+            estado: 'ACTIVO',
+        };
+        return await this.usuariosService.crearUsuario(usuarioNuevo);
     }
 };
 exports.AuthService = AuthService;

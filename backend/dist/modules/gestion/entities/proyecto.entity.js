@@ -18,7 +18,6 @@ let Proyecto = class Proyecto {
     id;
     nombre;
     estado;
-    fechaFin;
     idCliente;
     cliente;
     tareas;
@@ -37,16 +36,12 @@ __decorate([
     __metadata("design:type", String)
 ], Proyecto.prototype, "estado", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'fecha_fin', type: 'date', nullable: true }),
-    __metadata("design:type", Date)
-], Proyecto.prototype, "fechaFin", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: "id_cliente" }),
+    (0, typeorm_1.Column)({ name: 'id_cliente' }),
     __metadata("design:type", Number)
 ], Proyecto.prototype, "idCliente", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => cliente_entity_1.Cliente),
-    (0, typeorm_1.JoinColumn)({ name: "id_cliente" }),
+    (0, typeorm_1.JoinColumn)({ name: 'id_cliente' }),
     __metadata("design:type", cliente_entity_1.Cliente)
 ], Proyecto.prototype, "cliente", void 0);
 __decorate([
@@ -54,6 +49,6 @@ __decorate([
     __metadata("design:type", Array)
 ], Proyecto.prototype, "tareas", void 0);
 exports.Proyecto = Proyecto = __decorate([
-    (0, typeorm_1.Entity)({ name: "proyectos" })
+    (0, typeorm_1.Entity)({ name: 'proyectos' })
 ], Proyecto);
 //# sourceMappingURL=proyecto.entity.js.map

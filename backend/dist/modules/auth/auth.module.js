@@ -9,8 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./controllers/auth.controller");
+const admin_controller_1 = require("./controllers/admin.controller");
+const usuarios_controller_1 = require("../gestion/controllers/usuarios.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const usuario_entity_1 = require("./entities/usuario.entity");
+const usuario_entity_1 = require("./entitites/usuario.entity");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const usuarios_service_1 = require("./services/usuarios.service");
@@ -21,14 +23,14 @@ let AuthModule = class AuthModule {
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        controllers: [auth_controller_1.AuthController],
+        controllers: [auth_controller_1.AuthController, admin_controller_1.AdminController, usuarios_controller_1.UsuariosController],
         providers: [usuarios_service_1.UsuariosService, auth_service_1.AuthService, auth_guard_1.AuthGuard],
         imports: [
             typeorm_1.TypeOrmModule.forFeature([usuario_entity_1.Usuario]),
             jwt_1.JwtModule.registerAsync({
                 inject: [config_1.ConfigService],
                 global: true,
-                useFactory: (configService) => {
+                useFactory: () => {
                     return {
                         secret: process.env.JWT_SECRET,
                         signOptions: { expiresIn: '8h' },
@@ -36,11 +38,7 @@ exports.AuthModule = AuthModule = __decorate([
                 },
             }),
         ],
-        exports: [
-            auth_guard_1.AuthGuard,
-            jwt_1.JwtModule,
-            usuarios_service_1.UsuariosService
-        ]
+        exports: [auth_guard_1.AuthGuard, usuarios_service_1.UsuariosService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

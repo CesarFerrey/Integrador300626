@@ -57,21 +57,13 @@ let ProyectosService = class ProyectosService {
         await this.repository.save(proyecto);
     }
     async obtenerProyectos() {
-        const proyectos = await this.repository.find({
-            relations: {
-                cliente: true
-            },
-            order: {
-                id: 'ASC'
-            }
-        });
+        const proyectos = await this.repository.find({ relations: { cliente: true }, order: { id: 'ASC' } });
         const dtoList = [];
         for (const p of proyectos) {
             const dto = new list_proyecto_dto_1.ListProyectoDTO();
             dto.id = p.id;
             dto.nombre = p.nombre;
             dto.estado = p.estado;
-            dto.fechaFin = p.fechaFin;
             if (p.cliente) {
                 dto.cliente = new list_cliente_dto_1.ListClienteDTO();
                 dto.cliente.id = p.cliente.id;
@@ -83,25 +75,13 @@ let ProyectosService = class ProyectosService {
         return dtoList;
     }
     async obtenerProyecto(id) {
-        const proyecto = await this.repository.findOne({
-            where: { id },
-            relations: {
-                cliente: true,
-                tareas: true
-            },
-            order: {
-                tareas: {
-                    id: 'ASC'
-                }
-            }
-        });
+        const proyecto = await this.repository.findOne({ where: { id }, relations: { cliente: true, tareas: true }, order: { tareas: { id: 'ASC' } } });
         if (!proyecto) {
             throw new common_1.BadRequestException('Proyecto no encontrado');
         }
         const dto = new proyecto_dto_1.ProyectoDTO();
         dto.nombre = proyecto.nombre;
         dto.estado = proyecto.estado;
-        dto.fechaFin = proyecto.fechaFin;
         if (proyecto.cliente) {
             dto.cliente = proyecto.cliente.nombre;
         }

@@ -9,4 +9,5 @@ export class UpdateTareaDto extends PartialType(CreateTareaDto) {
     @IsEnum(EstadosTareasEnum)
     @IsOptional()
     estado?: EstadosTareasEnum;
+
 }
