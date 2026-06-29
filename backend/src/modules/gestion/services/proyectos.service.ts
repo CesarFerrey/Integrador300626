@@ -60,16 +60,7 @@ export class ProyectosService {
 
     async obtenerProyectos(): Promise<ListProyectoDTO[]> {
 
-        //const proyectos: Proyecto[] = await this.repository.find({ relations: ['cliente'], order: { id: 'ASC' } });
-
-        const proyectos: Proyecto[] = await this.repository.find({
-            relations: {
-              cliente: true
-            },
-            order: {
-              id: 'ASC'
-            }
-          });
+        const proyectos: Proyecto[] = await this.repository.find({ relations: { cliente: true }, order: { id: 'ASC' } });
 
         const dtoList: ListProyectoDTO[] = [];
 
@@ -78,7 +69,6 @@ export class ProyectosService {
             dto.id = p.id;
             dto.nombre = p.nombre;
             dto.estado = p.estado;
-            dto.fechaFin = p.fechaFin;
             if (p.cliente) {
                 dto.cliente = new ListClienteDTO();
                 dto.cliente.id = p.cliente.id
@@ -94,20 +84,7 @@ export class ProyectosService {
 
     async obtenerProyecto(id: number): Promise<ProyectoDTO> {
 
-        //const proyecto: Proyecto | null = await this.repository.findOne({ where: { id }, relations: ['cliente', 'tareas'], order: { tareas: { id: 'ASC' } } });
-
-        const proyecto: Proyecto | null = await this.repository.findOne({
-            where: { id },
-            relations: {
-              cliente: true,
-              tareas: true
-            },
-            order: {
-              tareas: {
-                id: 'ASC'
-              }
-            }
-          });
+        const proyecto: Proyecto | null = await this.repository.findOne({ where: { id }, relations: { cliente: true, tareas: true }, order: { tareas: { id: 'ASC' } } });
 
         if (!proyecto) {
             throw new BadRequestException('Proyecto no encontrado');
@@ -116,7 +93,6 @@ export class ProyectosService {
         const dto = new ProyectoDTO();
         dto.nombre = proyecto.nombre;
         dto.estado = proyecto.estado;
-        dto.fechaFin = proyecto.fechaFin;
         if (proyecto.cliente) {
             dto.cliente = proyecto.cliente.nombre;
         }

@@ -10,11 +10,6 @@ export class ProyectoDTO {
     @ApiProperty()
     estado!: EstadosProyectosEnum;
 
-    @ApiProperty({
-        required: false
-    })
-    fechaFin?: Date;
-
     @ApiProperty()
     cliente!: string;
 
