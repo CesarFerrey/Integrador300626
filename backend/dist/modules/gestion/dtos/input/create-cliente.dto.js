@@ -14,6 +14,8 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateClienteDto {
     nombre;
+    email;
+    telefono;
 }
 exports.CreateClienteDto = CreateClienteDto;
 __decorate([
@@ -22,4 +24,14 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateClienteDto.prototype, "nombre", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateClienteDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateClienteDto.prototype, "telefono", void 0);
 //# sourceMappingURL=create-cliente.dto.js.map
