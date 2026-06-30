@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./modules/auth/auth.module");
 const gestion_module_1 = require("./modules/gestion/gestion.module");
 const typeorm_1 = require("@nestjs/typeorm");
+const audit_module_1 = require("./audit/audit.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,6 +35,7 @@ exports.AppModule = AppModule = __decorate([
                 logger: 'advanced-console',
             }),
             auth_module_1.AuthModule,
+            audit_module_1.AuditModule,
             gestion_module_1.GestionModule,
         ],
         controllers: [],

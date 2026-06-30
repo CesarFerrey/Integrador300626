@@ -1,0 +1,105 @@
+<!-- src/app/components/audit-history/audit-history.component.html -->
+<div class="audit-history-container">
+  <div class="audit-header">
+    <h4>
+      <i class="fas fa-history"></i>
+      Historial de Cambios
+    </h4>
+    <span class="badge badge-info">{{ totalItems }} cambios</span>
+  </div>
+
+  <div *ngIf="loading" class="text-center p-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Cargando historial...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && auditLogs.length === 0" class="text-center p-4 text-muted">
+    <i class="fas fa-inbox fa-2x mb-2"></i>
+    <p>No hay cambios registrados para este registro</p>
+  </div>
+
+  <div *ngIf="!loading && auditLogs.length > 0" class="audit-timeline">
+    <div *ngFor="let log of auditLogs" class="audit-item">
+      <div class="audit-timeline-line"></div>
+      <div class="audit-content">
+        <div class="audit-icon">
+          <i [class]="'fas ' + getActionIcon(log.action)"></i>
+        </div>
+        <div class="audit-details">
+          <div class="audit-header-info">
+            <span class="audit-action">
+              {{ log.action === 'CREATE' ? 'Creación' :
+                 log.action === 'UPDATE' ? 'Actualización' : 'Eliminación' }}
+            </span>
+            <span class="audit-user">
+              <i class="fas fa-user"></i>
+              {{ log.userEmail }}
+            </span>
+            <span class="audit-date">
+              <i class="far fa-clock"></i>
+              {{ formatDate(log.createdAt) }}
+            </span>
+          </div>
+
+          <div *ngIf="showFullHistory && log.changes" class="audit-changes">
+            <!-- Mostrar cambios detallados -->
+            <div *ngIf="log.action === 'UPDATE' && log.changes.before && log.changes.after">
+              <div class="change-group">
+                <h6>Cambios realizados:</h6>
+                <div *ngFor="let key of getObjectKeys(log.changes.before)"
+                     class="change-row">
+                  <div *ngIf="log.changes.before[key] !== log.changes.after[key]">
+                    <span class="field-name">{{ key }}:</span>
+                    <span class="old-value">{{ log.changes.before[key] }}</span>
+                    <span class="arrow">→</span>
+                    <span class="new-value">{{ log.changes.after[key] }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="log.action === 'CREATE' && log.changes.after">
+              <div class="change-group">
+                <h6>Datos creados:</h6>
+                <!-- <pre>{{ log.changes.after | json }}</pre> -->
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!showFullHistory" class="audit-summary">
+            <span class="text-muted">
+              {{ log.action === 'UPDATE' ? 'Registro actualizado' :
+                 log.action === 'CREATE' ? 'Registro creado' : 'Registro eliminado' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div *ngIf="totalPages > 1" class="pagination-container">
+    <nav aria-label="Historial de cambios">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="changePage(currentPage - 1)">
+            Anterior
+          </button>
+        </li>
+        <li *ngFor="let page of getPages()"
+            class="page-item"
+            [class.active]="page === currentPage">
+          <button class="page-link" (click)="changePage(page)">
+            {{ page }}
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="changePage(currentPage + 1)">
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

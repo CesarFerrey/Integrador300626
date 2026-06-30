@@ -10,11 +10,11 @@ exports.GestionModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const auth_module_1 = require("../auth/auth.module");
+const audit_module_1 = require("../../audit/audit.module");
 const tarea_entity_1 = require("./entities/tarea.entity");
 const cliente_entity_1 = require("./entities/cliente.entity");
 const proyecto_entity_1 = require("./entities/proyecto.entity");
 const usuario_entity_1 = require("../auth/entitites/usuario.entity");
-const auditoria_entity_1 = require("./entities/auditoria.entity");
 const clientes_controller_1 = require("./controllers/clientes.controller");
 const proyectos_controller_1 = require("./controllers/proyectos.controller");
 const tareas_controller_1 = require("./controllers/tareas.controller");
@@ -29,8 +29,9 @@ exports.GestionModule = GestionModule;
 exports.GestionModule = GestionModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([tarea_entity_1.Tarea, cliente_entity_1.Cliente, proyecto_entity_1.Proyecto, usuario_entity_1.Usuario, auditoria_entity_1.Auditoria]),
+            typeorm_1.TypeOrmModule.forFeature([tarea_entity_1.Tarea, cliente_entity_1.Cliente, proyecto_entity_1.Proyecto, usuario_entity_1.Usuario]),
             auth_module_1.AuthModule,
+            audit_module_1.AuditModule,
         ],
         controllers: [
             clientes_controller_1.ClientesController,
@@ -44,7 +45,12 @@ exports.GestionModule = GestionModule = __decorate([
             proyectos_service_1.ProyectosService,
             usuarios_service_1.UsuariosService,
         ],
-        exports: [],
+        exports: [
+            tarea_service_1.TareasService,
+            clientes_service_1.ClientesService,
+            proyectos_service_1.ProyectosService,
+            usuarios_service_1.UsuariosService,
+        ],
     })
 ], GestionModule);
 //# sourceMappingURL=gestion.module.js.map

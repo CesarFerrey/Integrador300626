@@ -4,8 +4,11 @@ import { TareasService } from "../services/tarea.service";
 export declare class TareasController {
     private readonly tareasService;
     constructor(tareasService: TareasService);
-    crearTarea(dto: CreateTareaDto, idProyecto: number): Promise<{
+    crearTarea(dto: CreateTareaDto, idProyecto: number, req: any): Promise<{
         id: number;
     }>;
-    actualizarTarea(dto: UpdateTareaDto, id: number): Promise<void>;
+    actualizarTarea(dto: UpdateTareaDto, id: number, idProyecto: number, req: any): Promise<void>;
+    eliminarTarea(id: number, idProyecto: number, req: any): Promise<{
+        message: string;
+    }>;
 }

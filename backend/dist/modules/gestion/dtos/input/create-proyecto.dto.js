@@ -15,6 +15,7 @@ const class_validator_1 = require("class-validator");
 class CreateProyectoDto {
     nombre;
     idCliente;
+    estado;
     fechaFin;
 }
 exports.CreateProyectoDto = CreateProyectoDto;
@@ -30,6 +31,12 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateProyectoDto.prototype, "idCliente", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProyectoDto.prototype, "estado", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),

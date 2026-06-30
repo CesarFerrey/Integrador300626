@@ -20,20 +20,34 @@ let AuthGuard = class AuthGuard {
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
+        console.log('🔐 [AUTH GUARD] Verificando token...');
         if (!token) {
+            console.log('❌ [AUTH GUARD] Token no encontrado');
             throw new common_1.UnauthorizedException();
         }
         try {
             const payload = await this.jwtService.verifyAsync(token);
+            console.log('✅ [AUTH GUARD] Token verificado:', payload);
+            request.user = {
+                id: payload.sub || payload.id,
+                email: payload.email,
+                username: payload.username || payload.email,
+                ...payload,
+            };
             request['usuario'] = payload;
+            console.log('✅ [AUTH GUARD] Usuario asignado a req.user:', request.user);
+            return true;
         }
-        catch {
+        catch (error) {
+            console.error('❌ [AUTH GUARD] Error verificando token:', error.message);
             throw new common_1.UnauthorizedException();
         }
-        return true;
     }
     extractTokenFromHeader(request) {
-        const [type, token] = request.headers['authorization']?.split(' ') ?? [];
+        const authHeader = request.headers['authorization'];
+        if (!authHeader)
+            return undefined;
+        const [type, token] = authHeader.split(' ');
         return type === 'Bearer' ? token : undefined;
     }
 };

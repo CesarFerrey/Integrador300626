@@ -6,10 +6,11 @@ import { ProyectosService } from '../services/proyectos.service';
 export declare class ProyectosController {
     private readonly proyectosService;
     constructor(proyectosService: ProyectosService);
-    crearProyecto(dto: CreateProyectoDto): Promise<{
-        id: number;
+    crearProyecto(dto: CreateProyectoDto, req: any): Promise<any>;
+    actualizarProyecto(id: number, dto: UpdateProyectoDto, req: any): Promise<any>;
+    eliminarProyecto(id: number, req: any): Promise<{
+        message: string;
     }>;
-    actualizarProyecto(dto: UpdateProyectoDto, id: number): Promise<void>;
     obtenerProyectos(): Promise<ListProyectoDTO[]>;
     obtenerProyecto(id: number): Promise<ProyectoDTO>;
 }

@@ -18,6 +18,7 @@ const config_1 = require("@nestjs/config");
 const usuarios_service_1 = require("./services/usuarios.service");
 const auth_service_1 = require("./services/auth.service");
 const auth_guard_1 = require("./guards/auth.guard");
+const audit_module_1 = require("../../audit/audit.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -37,6 +38,7 @@ exports.AuthModule = AuthModule = __decorate([
                     };
                 },
             }),
+            audit_module_1.AuditModule,
         ],
         exports: [auth_guard_1.AuthGuard, usuarios_service_1.UsuariosService],
     })

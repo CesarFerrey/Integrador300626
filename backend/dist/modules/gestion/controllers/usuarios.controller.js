@@ -16,6 +16,9 @@ exports.UsuariosController = void 0;
 const common_1 = require("@nestjs/common");
 const usuarios_service_1 = require("../../auth/services/usuarios.service");
 const swagger_1 = require("@nestjs/swagger");
+const audit_interceptor_1 = require("../../../audit/audit.interceptor");
+const audit_decorador_1 = require("../../../audit/audit.decorador");
+const auth_guard_1 = require("../../auth/guards/auth.guard");
 let UsuariosController = class UsuariosController {
     usuariosService;
     constructor(usuariosService) {
@@ -24,9 +27,51 @@ let UsuariosController = class UsuariosController {
     async findAll(nombre) {
         return await this.usuariosService.buscarUsuariosFiltrados(nombre || '');
     }
-    async cambiarPassword(id, nuevaClave) {
-        await this.usuariosService.cambiarPassword(id, nuevaClave);
-        return { message: 'Contraseña actualizada correctamente' };
+    async findOne(id) {
+        const usuario = await this.usuariosService.findOne(id);
+        if (!usuario) {
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        }
+        return usuario;
+    }
+    async create(createUsuarioDto, req) {
+        try {
+            const user = req.user;
+            console.log('👤 Creando usuario - Usuario:', user?.email);
+            return await this.usuariosService.create(createUsuarioDto, user?.id || user?.sub, user?.email || user?.username, req);
+        }
+        catch (error) {
+            console.error('Error al crear usuario:', error);
+            throw new common_1.InternalServerErrorException('Error al crear usuario');
+        }
+    }
+    async update(id, updateUsuarioDto, req) {
+        const user = req.user;
+        console.log('👤 Actualizando usuario - Usuario:', user?.email);
+        const usuario = await this.usuariosService.findOne(id);
+        if (!usuario) {
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        }
+        return await this.usuariosService.update(id, updateUsuarioDto, user?.id || user?.sub, user?.email || user?.username, req);
+    }
+    async delete(id, req) {
+        const user = req.user;
+        console.log('👤 Eliminando usuario - Usuario:', user?.email);
+        const usuario = await this.usuariosService.findOne(id);
+        if (!usuario) {
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        }
+        await this.usuariosService.delete(id, user?.id || user?.sub, user?.email || user?.username, req);
+        return { message: 'Usuario eliminado correctamente' };
+    }
+    async cambiarPassword(id, nuevaClave, req) {
+        const user = req.user;
+        console.log('👤 Cambiando password - Usuario:', user?.email);
+        const usuario = await this.usuariosService.findOne(id);
+        if (!usuario) {
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        }
+        return await this.usuariosService.cambiarPasswordConAuditoria(id, nuevaClave, user?.id || user?.sub, user?.email || user?.username, req);
     }
     async recuperarPassword(body) {
         try {
@@ -50,14 +95,51 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsuariosController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UsuariosController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, audit_decorador_1.Audit)('Usuario', 'CREATE'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsuariosController.prototype, "create", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, audit_decorador_1.Audit)('Usuario', 'UPDATE'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsuariosController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, audit_decorador_1.Audit)('Usuario', 'DELETE'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UsuariosController.prototype, "delete", null);
+__decorate([
     (0, common_1.Patch)(':id/password'),
+    (0, audit_decorador_1.Audit)('Usuario', 'UPDATE'),
     (0, swagger_1.ApiBody)({
         schema: { type: 'object', properties: { nuevaClave: { type: 'string' } } },
     }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('nuevaClave')),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:paramtypes", [Number, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsuariosController.prototype, "cambiarPassword", null);
 __decorate([
@@ -79,6 +161,8 @@ __decorate([
 exports.UsuariosController = UsuariosController = __decorate([
     (0, swagger_1.ApiTags)('Usuarios'),
     (0, common_1.Controller)('usuarios'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseInterceptors)(audit_interceptor_1.AuditInterceptor),
     __metadata("design:paramtypes", [usuarios_service_1.UsuariosService])
 ], UsuariosController);
 //# sourceMappingURL=usuarios.controller.js.map

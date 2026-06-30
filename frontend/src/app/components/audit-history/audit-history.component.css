@@ -1,0 +1,155 @@
+/* src/app/components/audit-history/audit-history.component.css */
+.audit-history-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.audit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.audit-timeline {
+  position: relative;
+}
+
+.audit-item {
+  position: relative;
+  padding: 10px 0;
+}
+
+.audit-timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e0e0e0;
+}
+
+.audit-content {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 40px;
+}
+
+.audit-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  color: white;
+}
+
+.action-create {
+  background: #28a745;
+}
+
+.action-update {
+  background: #007bff;
+}
+
+.action-delete {
+  background: #dc3545;
+}
+
+.audit-details {
+  flex: 1;
+}
+
+.audit-header-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.audit-action {
+  font-weight: bold;
+}
+
+.audit-user {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.audit-date {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-left: auto;
+}
+
+.audit-changes {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.change-group h6 {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.change-row {
+  margin: 3px 0;
+  padding: 3px 8px;
+  background: white;
+  border-radius: 3px;
+}
+
+.field-name {
+  font-weight: bold;
+  color: #495057;
+  margin-right: 5px;
+}
+
+.old-value {
+  color: #dc3545;
+  text-decoration: line-through;
+  margin-right: 5px;
+}
+
+.arrow {
+  margin: 0 5px;
+  color: #6c757d;
+}
+
+.new-value {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.audit-summary {
+  margin-top: 5px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+pre {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+  font-size: 0.85rem;
+  max-height: 200px;
+  overflow: auto;
+}

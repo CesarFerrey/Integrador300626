@@ -6,9 +6,13 @@ import { ClientesService } from '../services/clientes.service';
 export declare class ClientesController {
     private readonly clientesService;
     constructor(clientesService: ClientesService);
-    crearCliente(dto: CreateClienteDto): Promise<{
+    crearCliente(dto: CreateClienteDto, req: any): Promise<{
         id: number;
     }>;
-    actualizarCliente(id: number, dto: UpdateClienteDto): Promise<void>;
+    actualizarCliente(id: number, dto: UpdateClienteDto, req: any): Promise<void>;
+    eliminarCliente(id: number, req: any): Promise<{
+        message: string;
+    }>;
     obtenerClientes(estado: EstadosClientesEnum): Promise<ListClienteDTO[]>;
+    obtenerCliente(id: number): Promise<ListClienteDTO>;
 }

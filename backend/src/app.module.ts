@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { GestionModule } from './modules/gestion/gestion.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       logger: 'advanced-console',
     }),
     AuthModule,
+    AuditModule,
     GestionModule,
   ],
   controllers: [],
