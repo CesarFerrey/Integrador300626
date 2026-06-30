@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { UsuariosService } from './services/usuarios.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { AuditModule } from '../../audit/audit.module'; // ← IMPORTAR AuditModule
 
 @Module({
   // 2. AGREGAR EL USUARIOSCONTROLLER A LA LISTA
@@ -26,6 +27,7 @@ import { AuthGuard } from './guards/auth.guard';
         };
       },
     }),
+    AuditModule, 
   ],
   exports: [AuthGuard, UsuariosService],
 })

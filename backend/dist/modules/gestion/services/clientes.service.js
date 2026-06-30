@@ -21,18 +21,29 @@ const typeorm_2 = require("typeorm");
 const list_cliente_dto_1 = require("../dtos/output/list-cliente.dto");
 const common_1 = require("@nestjs/common");
 const proyectos_service_1 = require("./proyectos.service");
+const audit_service_1 = require("../../../audit/audit.service");
 let ClientesService = class ClientesService {
     repository;
     proyectosService;
-    constructor(repository, proyectosService) {
+    auditService;
+    constructor(repository, proyectosService, auditService) {
         this.repository = repository;
         this.proyectosService = proyectosService;
+        this.auditService = auditService;
     }
     async crearCliente(dto) {
         const cliente = this.repository.create(dto);
         cliente.estado = estados_clientes_enum_1.EstadosClientesEnum.ACTIVO;
         await this.repository.save(cliente);
         return { id: cliente.id };
+    }
+    async crearClienteConAuditoria(dto, userId, userEmail, req) {
+        const resultado = await this.crearCliente(dto);
+        if (userId && userEmail) {
+            await this.auditService.logChange('Cliente', String(resultado.id), 'CREATE', { after: dto }, userId, userEmail, req);
+            console.log('✅ Auditoría CREATE registrada para cliente:', resultado.id);
+        }
+        return resultado;
     }
     async actualizarCliente(id, dto) {
         const cliente = await this.repository.findOneBy({ id });
@@ -46,12 +57,36 @@ let ClientesService = class ClientesService {
         this.repository.merge(cliente, dto);
         await this.repository.save(cliente);
     }
+    async actualizarClienteConAuditoria(id, dto, userId, userEmail, req) {
+        const before = await this.repository.findOne({ where: { id } });
+        await this.actualizarCliente(id, dto);
+        const after = await this.repository.findOne({ where: { id } });
+        if (userId && userEmail) {
+            await this.auditService.logChange('Cliente', String(id), 'UPDATE', { before, after }, userId, userEmail, req);
+            console.log('✅ Auditoría UPDATE registrada para cliente:', id);
+        }
+    }
+    async eliminarClienteConAuditoria(id, userId, userEmail, req) {
+        const before = await this.repository.findOne({ where: { id } });
+        if (!before) {
+            throw new common_1.BadRequestException('Cliente no encontrado');
+        }
+        await this.repository.delete(id);
+        if (userId && userEmail) {
+            await this.auditService.logChange('Cliente', String(id), 'DELETE', { before }, userId, userEmail, req);
+            console.log('✅ Auditoría DELETE registrada para cliente:', id);
+        }
+    }
     async obtenerClientes(estado) {
         const whereCondition = {};
         if (estado) {
             whereCondition.estado = estado;
         }
-        const clientes = await this.repository.find({ select: { id: true, nombre: true, estado: true }, order: { id: 'ASC' }, where: whereCondition });
+        const clientes = await this.repository.find({
+            select: { id: true, nombre: true, estado: true },
+            order: { id: 'ASC' },
+            where: whereCondition
+        });
         const dtoList = [];
         for (const c of clientes) {
             const dto = new list_cliente_dto_1.ListClienteDTO();
@@ -62,8 +97,24 @@ let ClientesService = class ClientesService {
         }
         return dtoList;
     }
+    async obtenerCliente(id) {
+        const cliente = await this.repository.findOne({
+            where: { id },
+            select: { id: true, nombre: true, estado: true }
+        });
+        if (!cliente) {
+            throw new common_1.BadRequestException('Cliente no encontrado');
+        }
+        const dto = new list_cliente_dto_1.ListClienteDTO();
+        dto.id = cliente.id;
+        dto.nombre = cliente.nombre;
+        dto.estado = cliente.estado;
+        return dto;
+    }
     async existeClienteActivoPorId(id) {
-        const existe = await this.repository.exists({ where: { id, estado: estados_clientes_enum_1.EstadosClientesEnum.ACTIVO } });
+        const existe = await this.repository.exists({
+            where: { id, estado: estados_clientes_enum_1.EstadosClientesEnum.ACTIVO }
+        });
         return existe;
     }
 };
@@ -73,6 +124,7 @@ exports.ClientesService = ClientesService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(cliente_entity_1.Cliente)),
     __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => proyectos_service_1.ProyectosService))),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        proyectos_service_1.ProyectosService])
+        proyectos_service_1.ProyectosService,
+        audit_service_1.AuditService])
 ], ClientesService);
 //# sourceMappingURL=clientes.service.js.map

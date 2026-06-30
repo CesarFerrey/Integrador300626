@@ -5,5 +5,8 @@ export declare class Tarea {
     descripcion: string;
     estado: EstadosTareasEnum;
     idProyecto: number;
+    tareaPadreId: number | null;
+    tareaPadre: Tarea | null;
+    tareasHijas: Tarea[];
     proyecto: Proyecto;
 }

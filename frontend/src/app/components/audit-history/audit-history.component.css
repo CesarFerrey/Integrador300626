@@ -1,0 +1,76 @@
+.audit-history-container {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.audit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.audit-header h5 {
+  margin: 0;
+}
+
+.audit-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.audit-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.audit-item:last-child {
+  border-bottom: none;
+}
+
+.audit-changes {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.change-row {
+  padding: 2px 0;
+}
+
+.field-name {
+  font-weight: bold;
+  color: #495057;
+  margin-right: 5px;
+}
+
+.old-value {
+  color: #dc3545;
+  text-decoration: line-through;
+  margin-right: 5px;
+}
+
+.arrow {
+  margin: 0 5px;
+  color: #6c757d;
+}
+
+.new-value {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+.pagination-container {
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+}

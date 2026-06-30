@@ -15,6 +15,7 @@ const class_validator_1 = require("class-validator");
 class CreateProyectoDto {
     nombre;
     idCliente;
+    fechaFin;
 }
 exports.CreateProyectoDto = CreateProyectoDto;
 __decorate([

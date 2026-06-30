@@ -31,16 +31,18 @@ let ProyectosService = class ProyectosService {
         this.clientesService = clientesService;
     }
     async crearProyecto(dto) {
-        const proyecto = this.repository.create(dto);
-        proyecto.estado = estados_proyectos_enum_1.EstadosProyectosEnum.ACTIVO;
-        if (dto.idCliente) {
-            const clienteActivo = await this.clientesService.existeClienteActivoPorId(dto.idCliente);
-            if (!clienteActivo) {
-                throw new common_1.BadRequestException('Se debe especificar un cliente activo para el proyecto');
-            }
+        if (!dto.idCliente) {
+            throw new common_1.BadRequestException('Se debe especificar un ID de cliente válido para el proyecto');
         }
-        await this.repository.save(proyecto);
-        return { id: proyecto.id };
+        const clienteActivo = await this.clientesService.existeClienteActivoPorId(dto.idCliente);
+        if (!clienteActivo) {
+            throw new common_1.BadRequestException('Se debe especificar un cliente activo para el proyecto');
+        }
+        const { estado, ...datosProyecto } = dto;
+        const proyecto = this.repository.create(datosProyecto);
+        proyecto.estado = estados_proyectos_enum_1.EstadosProyectosEnum.ACTIVO;
+        proyecto.cliente = { id: dto.idCliente };
+        return await this.repository.save(proyecto);
     }
     async actualizarProyecto(id, dto) {
         const proyecto = await this.repository.findOne({ where: { id } });
@@ -52,9 +54,19 @@ let ProyectosService = class ProyectosService {
             if (!clienteActivo) {
                 throw new common_1.BadRequestException('Se debe especificar un cliente activo para el proyecto');
             }
+            proyecto.cliente = { id: dto.idCliente };
         }
         this.repository.merge(proyecto, dto);
         await this.repository.save(proyecto);
+        const actualizado = await this.repository.findOne({ where: { id } });
+        return actualizado;
+    }
+    async eliminarProyecto(id) {
+        const proyecto = await this.repository.findOne({ where: { id } });
+        if (!proyecto) {
+            throw new common_1.BadRequestException('Proyecto no encontrado');
+        }
+        await this.repository.delete(id);
     }
     async obtenerProyectos() {
         const proyectos = await this.repository.find({ relations: { cliente: true }, order: { id: 'ASC' } });
@@ -75,7 +87,11 @@ let ProyectosService = class ProyectosService {
         return dtoList;
     }
     async obtenerProyecto(id) {
-        const proyecto = await this.repository.findOne({ where: { id }, relations: { cliente: true, tareas: true }, order: { tareas: { id: 'ASC' } } });
+        const proyecto = await this.repository.findOne({
+            where: { id },
+            relations: { cliente: true, tareas: true },
+            order: { tareas: { id: 'ASC' } }
+        });
         if (!proyecto) {
             throw new common_1.BadRequestException('Proyecto no encontrado');
         }
@@ -97,8 +113,12 @@ let ProyectosService = class ProyectosService {
         return dto;
     }
     async existeProyectoPorIdCliente(idCliente) {
-        const existe = await this.repository.exists({ where: { cliente: { id: idCliente }, estado: (0, typeorm_2.In)([estados_proyectos_enum_1.EstadosProyectosEnum.ACTIVO, estados_proyectos_enum_1.EstadosProyectosEnum.FINALIZADO]) } });
-        return existe;
+        return await this.repository.exists({
+            where: {
+                cliente: { id: idCliente },
+                estado: (0, typeorm_2.In)([estados_proyectos_enum_1.EstadosProyectosEnum.ACTIVO, estados_proyectos_enum_1.EstadosProyectosEnum.FINALIZADO])
+            }
+        });
     }
 };
 exports.ProyectosService = ProyectosService;

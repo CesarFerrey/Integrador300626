@@ -18,6 +18,9 @@ let Tarea = class Tarea {
     descripcion;
     estado;
     idProyecto;
+    tareaPadreId;
+    tareaPadre;
+    tareasHijas;
     proyecto;
 };
 exports.Tarea = Tarea;
@@ -37,6 +40,19 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'id_proyecto' }),
     __metadata("design:type", Number)
 ], Tarea.prototype, "idProyecto", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'tarea_padre_id', nullable: true }),
+    __metadata("design:type", Object)
+], Tarea.prototype, "tareaPadreId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Tarea, (tarea) => tarea.tareasHijas),
+    (0, typeorm_1.JoinColumn)({ name: 'tarea_padre_id' }),
+    __metadata("design:type", Object)
+], Tarea.prototype, "tareaPadre", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Tarea, (tarea) => tarea.tareaPadre),
+    __metadata("design:type", Array)
+], Tarea.prototype, "tareasHijas", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => proyecto_entity_1.Proyecto),
     (0, typeorm_1.JoinColumn)({ name: 'id_proyecto' }),

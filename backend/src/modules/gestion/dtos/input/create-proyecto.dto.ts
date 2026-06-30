@@ -13,4 +13,13 @@ export class CreateProyectoDto {
     @IsOptional()
     idCliente!: number;
 
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    estado!: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    fechaFin?: string;
 }

@@ -6,6 +6,9 @@ export declare class Proyecto {
     nombre: string;
     estado: EstadosProyectosEnum;
     idCliente: number;
+    proyectoPadreId: number | null;
+    proyectoPadre: Proyecto | null;
+    proyectosHijos: Proyecto[];
     cliente: Cliente;
     tareas: Tarea[];
 }

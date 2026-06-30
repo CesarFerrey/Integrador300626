@@ -7,6 +7,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { ClientesListado } from './proyectos/clientes/listado/clientes-listado';
 import { RecuperarPasswordComponent } from './auth/recuperar-password/recuperar-password.component'; // <--- 1. IMPORTA AQUÍ
 import { Register } from './auth/register/register';
+import { AuditFullHistoryComponent } from './audit/audit-full-history.component';
 
 
 export const routes: Routes = [
@@ -47,6 +48,11 @@ export const routes: Routes = [
         {
           path: 'proyectos/:id/tareas',
           component: TareasListado
+        },
+
+        {
+          path: 'audit',
+          component: AuditFullHistoryComponent
         }
 
       ]

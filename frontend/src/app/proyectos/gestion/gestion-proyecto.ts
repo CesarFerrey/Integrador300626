@@ -22,7 +22,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     selector: "app-gestion-proyecto",
     templateUrl: "./gestion-proyecto.html",
     styleUrls: ["./gestion-proyecto.css"],
-    imports: [DialogModule, InputTextModule, SelectModule, ButtonModule, ReactiveFormsModule, ClientesListado, NgSelectModule,DatePickerModule ]
+    imports: [DialogModule, InputTextModule, SelectModule, ButtonModule, ReactiveFormsModule, NgSelectModule, DatePickerModule]
 })
 export class GestionProyecto {
 
@@ -56,7 +56,7 @@ export class GestionProyecto {
         cliente: new FormControl(null),
         estado: new FormControl(null),
         fechaFin: new FormControl(null)
-        
+
     });
 
     constructor() {

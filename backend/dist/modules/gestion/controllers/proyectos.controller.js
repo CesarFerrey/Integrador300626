@@ -19,16 +19,29 @@ const update_proyecto_dto_1 = require("../dtos/input/update-proyecto.dto");
 const swagger_1 = require("@nestjs/swagger");
 const list_proyecto_dto_1 = require("../dtos/output/list-proyecto.dto");
 const proyectos_service_1 = require("../services/proyectos.service");
+const audit_interceptor_1 = require("../../../audit/audit.interceptor");
+const audit_decorador_1 = require("../../../audit/audit.decorador");
+const auth_guard_1 = require("../../auth/guards/auth.guard");
 let ProyectosController = class ProyectosController {
     proyectosService;
     constructor(proyectosService) {
         this.proyectosService = proyectosService;
     }
-    async crearProyecto(dto) {
+    async crearProyecto(dto, req) {
+        const user = req.user;
+        console.log('👤 Creando proyecto - Usuario:', user?.email);
         return await this.proyectosService.crearProyecto(dto);
     }
-    async actualizarProyecto(dto, id) {
-        await this.proyectosService.actualizarProyecto(id, dto);
+    async actualizarProyecto(id, dto, req) {
+        const user = req.user;
+        console.log('👤 Actualizando proyecto - Usuario:', user?.email);
+        return await this.proyectosService.actualizarProyecto(id, dto);
+    }
+    async eliminarProyecto(id, req) {
+        const user = req.user;
+        console.log('👤 Eliminando proyecto - Usuario:', user?.email);
+        await this.proyectosService.eliminarProyecto(id);
+        return { message: 'Proyecto eliminado correctamente' };
     }
     async obtenerProyectos() {
         return await this.proyectosService.obtenerProyectos();
@@ -41,20 +54,34 @@ exports.ProyectosController = ProyectosController;
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Post)(),
+    (0, audit_decorador_1.Audit)('Proyecto', 'CREATE'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_proyecto_dto_1.CreateProyectoDto]),
+    __metadata("design:paramtypes", [create_proyecto_dto_1.CreateProyectoDto, Object]),
     __metadata("design:returntype", Promise)
 ], ProyectosController.prototype, "crearProyecto", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('id')),
+    (0, audit_decorador_1.Audit)('Proyecto', 'UPDATE'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [update_proyecto_dto_1.UpdateProyectoDto, Number]),
+    __metadata("design:paramtypes", [Number, update_proyecto_dto_1.UpdateProyectoDto, Object]),
     __metadata("design:returntype", Promise)
 ], ProyectosController.prototype, "actualizarProyecto", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.Delete)(':id'),
+    (0, audit_decorador_1.Audit)('Proyecto', 'DELETE'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], ProyectosController.prototype, "eliminarProyecto", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOkResponse)({ type: list_proyecto_dto_1.ListProyectoDTO, isArray: true }),
@@ -72,7 +99,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProyectosController.prototype, "obtenerProyecto", null);
 exports.ProyectosController = ProyectosController = __decorate([
+    (0, swagger_1.ApiTags)('Proyectos'),
     (0, common_1.Controller)('proyectos'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseInterceptors)(audit_interceptor_1.AuditInterceptor),
     __metadata("design:paramtypes", [proyectos_service_1.ProyectosService])
 ], ProyectosController);
 //# sourceMappingURL=proyectos.controller.js.map

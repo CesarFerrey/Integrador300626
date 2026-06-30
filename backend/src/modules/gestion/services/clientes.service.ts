@@ -8,23 +8,51 @@ import { FindOptionsWhere, Repository } from "typeorm";
 import { ListClienteDTO } from "../dtos/output/list-cliente.dto";
 import { BadRequestException, forwardRef, Inject } from "@nestjs/common";
 import { ProyectosService } from "./proyectos.service";
+import { AuditService } from '../../../audit/audit.service';
+import { Request } from 'express';
 
 @Injectable()
 export class ClientesService {
 
-    constructor(@InjectRepository(Cliente) private readonly repository: Repository<Cliente>,
-        @Inject(forwardRef(() => ProyectosService)) private readonly proyectosService: ProyectosService) { }
+    constructor(
+        @InjectRepository(Cliente) private readonly repository: Repository<Cliente>,
+        @Inject(forwardRef(() => ProyectosService)) private readonly proyectosService: ProyectosService,
+        private readonly auditService: AuditService,
+    ) {}
 
     async crearCliente(dto: CreateClienteDto): Promise<{ id: number }> {
-
         const cliente: Cliente = this.repository.create(dto);
         cliente.estado = EstadosClientesEnum.ACTIVO;
         await this.repository.save(cliente);
         return { id: cliente.id };
     }
 
-    async actualizarCliente(id: number, dto: UpdateClienteDto): Promise<void> {
+    // Nuevo método con auditoría
+    async crearClienteConAuditoria(
+        dto: CreateClienteDto,
+        userId?: string,
+        userEmail?: string,
+        req?: Request
+    ): Promise<{ id: number }> {
+        const resultado = await this.crearCliente(dto);
+        
+        if (userId && userEmail) {
+            await this.auditService.logChange(
+                'Cliente',
+                String(resultado.id),
+                'CREATE',
+                { after: dto },
+                userId,
+                userEmail,
+                req,
+            );
+            console.log('✅ Auditoría CREATE registrada para cliente:', resultado.id);
+        }
+        
+        return resultado;
+    }
 
+    async actualizarCliente(id: number, dto: UpdateClienteDto): Promise<void> {
         const cliente: Cliente | null = await this.repository.findOneBy({ id });
 
         if (!cliente) {
@@ -41,15 +69,77 @@ export class ClientesService {
         await this.repository.save(cliente);
     }
 
-    async obtenerClientes(estado: EstadosClientesEnum): Promise<ListClienteDTO[]> {
+    // Nuevo método con auditoría
+    async actualizarClienteConAuditoria(
+        id: number,
+        dto: UpdateClienteDto,
+        userId?: string,
+        userEmail?: string,
+        req?: Request
+    ): Promise<void> {
+        // Obtener estado antes
+        const before = await this.repository.findOne({ where: { id } });
+        
+        await this.actualizarCliente(id, dto);
+        
+        // Obtener estado después
+        const after = await this.repository.findOne({ where: { id } });
+        
+        if (userId && userEmail) {
+            await this.auditService.logChange(
+                'Cliente',
+                String(id),
+                'UPDATE',
+                { before, after },
+                userId,
+                userEmail,
+                req,
+            );
+            console.log('✅ Auditoría UPDATE registrada para cliente:', id);
+        }
+    }
 
+    async eliminarClienteConAuditoria(
+        id: number,
+        userId?: string,
+        userEmail?: string,
+        req?: Request
+    ): Promise<void> {
+        // Obtener estado antes
+        const before = await this.repository.findOne({ where: { id } });
+        
+        if (!before) {
+            throw new BadRequestException('Cliente no encontrado');
+        }
+        
+        await this.repository.delete(id);
+        
+        if (userId && userEmail) {
+            await this.auditService.logChange(
+                'Cliente',
+                String(id),
+                'DELETE',
+                { before },
+                userId,
+                userEmail,
+                req,
+            );
+            console.log('✅ Auditoría DELETE registrada para cliente:', id);
+        }
+    }
+
+    async obtenerClientes(estado: EstadosClientesEnum): Promise<ListClienteDTO[]> {
         const whereCondition: FindOptionsWhere<ListClienteDTO> = {}
 
         if (estado){
             whereCondition.estado = estado
         }
 
-        const clientes: Cliente[] = await this.repository.find({ select: { id: true, nombre: true, estado: true }, order: { id: 'ASC' }, where: whereCondition });
+        const clientes: Cliente[] = await this.repository.find({ 
+            select: { id: true, nombre: true, estado: true }, 
+            order: { id: 'ASC' }, 
+            where: whereCondition 
+        });
 
         const dtoList: ListClienteDTO[] = [];
 
@@ -64,9 +154,29 @@ export class ClientesService {
         return dtoList;
     }
 
-    async existeClienteActivoPorId(id: number): Promise<boolean> {
+    // NUEVO MÉTODO: Obtener un cliente por ID
+    async obtenerCliente(id: number): Promise<ListClienteDTO> {
+        const cliente = await this.repository.findOne({ 
+            where: { id },
+            select: { id: true, nombre: true, estado: true }
+        });
 
-        const existe: boolean = await this.repository.exists({ where: { id, estado: EstadosClientesEnum.ACTIVO } });
+        if (!cliente) {
+            throw new BadRequestException('Cliente no encontrado');
+        }
+
+        const dto = new ListClienteDTO();
+        dto.id = cliente.id;
+        dto.nombre = cliente.nombre;
+        dto.estado = cliente.estado;
+        
+        return dto;
+    }
+
+    async existeClienteActivoPorId(id: number): Promise<boolean> {
+        const existe: boolean = await this.repository.exists({ 
+            where: { id, estado: EstadosClientesEnum.ACTIVO } 
+        });
         return existe;
     }
 }
