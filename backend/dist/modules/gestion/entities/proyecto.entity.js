@@ -19,6 +19,9 @@ let Proyecto = class Proyecto {
     nombre;
     estado;
     idCliente;
+    proyectoPadreId;
+    proyectoPadre;
+    proyectosHijos;
     cliente;
     tareas;
 };
@@ -36,9 +39,22 @@ __decorate([
     __metadata("design:type", String)
 ], Proyecto.prototype, "estado", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'id_cliente' }),
+    (0, typeorm_1.Column)({ name: 'id_cliente', nullable: true }),
     __metadata("design:type", Number)
 ], Proyecto.prototype, "idCliente", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'proyecto_padre_id', nullable: true }),
+    __metadata("design:type", Object)
+], Proyecto.prototype, "proyectoPadreId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Proyecto, (proyecto) => proyecto.proyectosHijos),
+    (0, typeorm_1.JoinColumn)({ name: 'proyecto_padre_id' }),
+    __metadata("design:type", Object)
+], Proyecto.prototype, "proyectoPadre", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Proyecto, (proyecto) => proyecto.proyectoPadre),
+    __metadata("design:type", Array)
+], Proyecto.prototype, "proyectosHijos", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => cliente_entity_1.Cliente),
     (0, typeorm_1.JoinColumn)({ name: 'id_cliente' }),

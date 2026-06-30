@@ -1,113 +1,46 @@
-/* src/app/components/audit-history/audit-history.component.css */
 .audit-history-container {
   background: white;
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .audit-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.audit-timeline {
-  position: relative;
+.audit-header h5 {
+  margin: 0;
+}
+
+.audit-list {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .audit-item {
-  position: relative;
   padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.audit-timeline-line {
-  position: absolute;
-  left: 20px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #e0e0e0;
-}
-
-.audit-content {
-  display: flex;
-  align-items: flex-start;
-  padding-left: 40px;
-}
-
-.audit-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  flex-shrink: 0;
-  color: white;
-}
-
-.action-create {
-  background: #28a745;
-}
-
-.action-update {
-  background: #007bff;
-}
-
-.action-delete {
-  background: #dc3545;
-}
-
-.audit-details {
-  flex: 1;
-}
-
-.audit-header-info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 5px;
-}
-
-.audit-action {
-  font-weight: bold;
-}
-
-.audit-user {
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.audit-date {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-left: auto;
+.audit-item:last-child {
+  border-bottom: none;
 }
 
 .audit-changes {
-  margin-top: 10px;
-  padding: 10px;
+  padding: 8px 12px;
   background: #f8f9fa;
   border-radius: 4px;
-  font-size: 0.9rem;
-}
-
-.change-group h6 {
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-  color: #495057;
+  font-size: 0.85rem;
 }
 
 .change-row {
-  margin: 3px 0;
-  padding: 3px 8px;
-  background: white;
-  border-radius: 3px;
+  padding: 2px 0;
 }
 
 .field-name {
@@ -132,24 +65,12 @@
   font-weight: bold;
 }
 
-.audit-summary {
-  margin-top: 5px;
-  color: #6c757d;
-  font-style: italic;
+.badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
 }
 
 .pagination-container {
-  margin-top: 20px;
-  padding-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid #e0e0e0;
-}
-
-pre {
-  background: white;
-  padding: 10px;
-  border-radius: 4px;
-  margin: 5px 0;
-  font-size: 0.85rem;
-  max-height: 200px;
-  overflow: auto;
 }

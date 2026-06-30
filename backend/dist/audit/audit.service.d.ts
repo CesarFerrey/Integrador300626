@@ -13,4 +13,11 @@ export declare class AuditService {
         totalPages: number;
     }>;
     getRecentActivity(limit?: number): Promise<AuditLog[]>;
+    getAllHistory(page?: number, limit?: number): Promise<{
+        items: AuditLog[];
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }>;
 }

@@ -62,4 +62,20 @@ export class AuditService {
       take: limit,
     });
   }
+
+  async getAllHistory(page: number = 1, limit: number = 20) {
+    const [items, total] = await this.auditRepository.findAndCount({
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
 }

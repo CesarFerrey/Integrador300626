@@ -1,0 +1,117 @@
+<section class="audit-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Historial de auditoría</h1>
+      <p>Visualiza todos los cambios registrados en el sistema.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm volver-btn">
+      <i class="fas fa-arrow-left me-2"></i>
+      Volver al tablero
+    </a>
+  </div>
+
+  <div class="dashboard-info">
+    <p class="fecha-dashboard">Total de eventos: {{ totalItems }}</p>
+    <span class="estado-sistema">Página {{ currentPage }} de {{ totalPages || 1 }}</span>
+  </div>
+
+  @if (loading) {
+    <div class="text-center p-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted mt-2">Cargando historial completo...</p>
+    </div>
+  }
+
+  @if (!loading && logs.length === 0) {
+    <div class="text-center p-5 empty-state ultimos-proyectos">
+      <i class="fas fa-inbox fa-2x mb-3 d-block"></i>
+      <h5>No hay eventos de auditoría</h5>
+      <p class="text-muted mb-0">Cuando se registren acciones, aparecerán aquí.</p>
+    </div>
+  }
+
+  @if (!loading && logs.length > 0) {
+    <div class="ultimos-proyectos historial-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Entidad</th>
+            <th>Acción</th>
+            <th>Usuario</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of logs; track log.id) {
+            <tr>
+              <td class="fecha-col">{{ formatDate(log.createdAt) }}</td>
+              <td>
+                <strong>{{ getEntityName(log.entityName) }}</strong>
+                <small class="d-block text-muted">ID: {{ log.entityId }}</small>
+              </td>
+              <td>
+                <span class="badge"
+                      [class.bg-success]="log.action === 'CREATE'"
+                      [class.bg-primary]="log.action === 'UPDATE'"
+                      [class.bg-danger]="log.action === 'DELETE'">
+                  <i [class]="getActionIcon(log.action)"></i>
+                  {{ getActionText(log.action) }}
+                </span>
+              </td>
+              <td>
+                <span class="d-block"><i class="fas fa-user me-1"></i>{{ log.userEmail || 'Usuario' }}</span>
+                <small class="text-muted"><i class="fas fa-network-wired me-1"></i>{{ log.userIp || 'Sin IP' }}</small>
+              </td>
+              <td>
+                @if (log.action === 'UPDATE' && log.changes.before && log.changes.after) {
+                  <div class="audit-changes">
+                    @for (key of getChangedFields(log.changes); track key) {
+                      <div class="change-row">
+                        <span class="field-name">{{ key }}:</span>
+                        <span class="old-value">{{ getValue(log.changes.before[key]) }}</span>
+                        <span class="arrow">→</span>
+                        <span class="new-value">{{ getValue(log.changes.after[key]) }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+
+                @if (log.action === 'CREATE' && log.changes.after) {
+                  <span class="text-success"><i class="fas fa-plus-circle me-1"></i>Se creó un nuevo registro</span>
+                }
+
+                @if (log.action === 'DELETE' && log.changes.before) {
+                  <span class="text-danger"><i class="fas fa-trash-alt me-1"></i>Se eliminó el registro</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (!loading && totalPages > 1) {
+    <nav class="pagination-wrap" aria-label="Paginación de auditoría">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="changePage(currentPage - 1)">Anterior</button>
+        </li>
+
+        @for (page of getPages(); track page) {
+          <li class="page-item" [class.active]="page === currentPage">
+            <button class="page-link" (click)="changePage(page)">{{ page }}</button>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="changePage(currentPage + 1)">Siguiente</button>
+        </li>
+      </ul>
+    </nav>
+  }
+</section>

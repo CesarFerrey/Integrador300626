@@ -55,6 +55,20 @@ let AuditService = class AuditService {
             take: limit,
         });
     }
+    async getAllHistory(page = 1, limit = 20) {
+        const [items, total] = await this.auditRepository.findAndCount({
+            order: { createdAt: 'DESC' },
+            skip: (page - 1) * limit,
+            take: limit,
+        });
+        return {
+            items,
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        };
+    }
 };
 exports.AuditService = AuditService;
 exports.AuditService = AuditService = __decorate([

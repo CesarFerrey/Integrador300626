@@ -2,14 +2,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuditLog, AuditLogResponse } from '../components/audit-history/audit-history.component';
+import { AuditLog, AuditLogResponse } from '../models/audit-log.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuditService {
   private http = inject(HttpClient);
-  private apiUrl = '/api/audit'; // Asegúrate que esta URL sea correcta
+  private apiUrl = '/api/v1/audit';
 
   getEntityHistory(
     entityName: string,
@@ -30,5 +30,14 @@ export class AuditService {
       `${this.apiUrl}/recent`,
       { params: { limit: limit.toString() } }
     );
+  }
+
+  getAllHistory(page: number = 1, limit: number = 20): Observable<AuditLogResponse> {
+    return this.http.get<AuditLogResponse>(this.apiUrl, {
+      params: {
+        page: page.toString(),
+        limit: limit.toString(),
+      },
+    });
   }
 }

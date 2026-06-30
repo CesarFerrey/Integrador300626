@@ -5,7 +5,7 @@
 
     <div class="logo">
       <i class="fas fa-code me-2"></i>
-      Gestión Proyectos
+      Gestión de Proyectos
     </div>
 
     <nav>
@@ -14,7 +14,7 @@
         routerLinkActive="active-link"
         [routerLinkActiveOptions]="{ exact: true }">
         <i class="fas fa-tachometer-alt me-2"></i>
-        Dashboard
+        Tablero
       </a>
 
       <a
@@ -118,7 +118,7 @@
           <div class="audit-item-content">
             <div class="audit-item-icon">
               <span class="badge" [class]="getActionBadgeClass(change.action)">
-                {{ change.action }}
+                {{ getActionLabel(change.action) }}
               </span>
             </div>
             <div class="audit-item-details">

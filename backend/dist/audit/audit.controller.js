@@ -21,6 +21,11 @@ let AuditController = class AuditController {
     constructor(auditService) {
         this.auditService = auditService;
     }
+    async getAllHistory(page, limit) {
+        const pageNumber = page ? parseInt(page, 10) : 1;
+        const limitNumber = limit ? parseInt(limit, 10) : 20;
+        return this.auditService.getAllHistory(pageNumber, limitNumber);
+    }
     async getEntityHistory(entityName, entityId, page, limit) {
         const pageNumber = page ? parseInt(page, 10) : 1;
         const limitNumber = limit ? parseInt(limit, 10) : 10;
@@ -39,6 +44,14 @@ let AuditController = class AuditController {
     }
 };
 exports.AuditController = AuditController;
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], AuditController.prototype, "getAllHistory", null);
 __decorate([
     (0, common_1.Get)('entity/:entityName/:entityId'),
     __param(0, (0, common_1.Param)('entityName')),

@@ -26,8 +26,8 @@ export class AuditLog {
     };
 
   @Column()
-  @Index()
-  userId: string; // ID del usuario que hizo el cambio
+    @Index()
+    userId!: string; // ID del usuario que hizo el cambio
 
   @Column({ nullable: true })
   userEmail: string;

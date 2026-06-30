@@ -8,6 +8,14 @@ import { AuthGuard } from '../modules/auth/guards/auth.guard';
 export class AuditController {
   constructor(private auditService: AuditService) {}
 
+  @Get()
+  async getAllHistory(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pageNumber = page ? parseInt(page, 10) : 1;
+    const limitNumber = limit ? parseInt(limit, 10) : 20;
+
+    return this.auditService.getAllHistory(pageNumber, limitNumber);
+  }
+
   @Get('entity/:entityName/:entityId')
   async getEntityHistory(
     @Param('entityName') entityName: string,

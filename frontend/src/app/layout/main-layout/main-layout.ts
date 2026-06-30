@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthStore } from '../../auth/auth-store';
 import { AuditService } from '../../services/audit.service';
 import { CommonModule } from '@angular/common';
-import { AuditLog } from '../../components/audit-history/audit-history.component';
+import { AuditLog } from '../../models/audit-log.model';
 
 @Component({
   selector: 'app-main-layout',
@@ -101,6 +101,15 @@ export class MainLayout implements OnInit {
       'DELETE': 'badge-danger'
     };
     return classes[action] || 'badge-secondary';
+  }
+
+  getActionLabel(action: string): string {
+    const labels: Record<string, string> = {
+      'CREATE': 'Creación',
+      'UPDATE': 'Edición',
+      'DELETE': 'Borrado',
+    };
+    return labels[action] || action;
   }
 
   formatDate(date: Date): string {

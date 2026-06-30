@@ -1,105 +1,128 @@
-<!-- src/app/components/audit-history/audit-history.component.html -->
-<div class="audit-history-container">
-  <div class="audit-header">
-    <h4>
-      <i class="fas fa-history"></i>
+<div class="container-fluid p-3 audit-history-container border rounded bg-light">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+    <h5 class="mb-0 text-primary">
+      <i class="fas fa-history me-2"></i>
       Historial de Cambios
-    </h4>
-    <span class="badge badge-info">{{ totalItems }} cambios</span>
+    </h5>
+    <span class="badge rounded-pill"
+          [class.bg-primary]="totalItems > 0"
+          [class.bg-secondary]="totalItems === 0">
+      {{ totalItems }} cambios
+    </span>
   </div>
 
-  <div *ngIf="loading" class="text-center p-4">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Cargando historial...</span>
+  <!-- Loading -->
+  @if (loading) {
+    <div class="text-center py-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted small mb-0">Cargando historial...</p>
     </div>
-  </div>
+  }
 
-  <div *ngIf="!loading && auditLogs.length === 0" class="text-center p-4 text-muted">
-    <i class="fas fa-inbox fa-2x mb-2"></i>
-    <p>No hay cambios registrados para este registro</p>
-  </div>
+  <!-- Empty State -->
+  @if (!loading && auditLogs.length === 0) {
+    <div class="text-center py-5 text-muted">
+      <i class="fas fa-inbox fa-3x mb-3 d-block text-secondary opacity-50"></i>
+      <p class="mb-1 fw-semibold">No hay cambios registrados</p>
+      <p class="small mb-0">Los cambios aparecerán aquí cuando se realicen operaciones</p>
+    </div>
+  }
 
-  <div *ngIf="!loading && auditLogs.length > 0" class="audit-timeline">
-    <div *ngFor="let log of auditLogs" class="audit-item">
-      <div class="audit-timeline-line"></div>
-      <div class="audit-content">
-        <div class="audit-icon">
-          <i [class]="'fas ' + getActionIcon(log.action)"></i>
-        </div>
-        <div class="audit-details">
-          <div class="audit-header-info">
-            <span class="audit-action">
-              {{ log.action === 'CREATE' ? 'Creación' :
-                 log.action === 'UPDATE' ? 'Actualización' : 'Eliminación' }}
-            </span>
-            <span class="audit-user">
-              <i class="fas fa-user"></i>
-              {{ log.userEmail }}
-            </span>
-            <span class="audit-date">
-              <i class="far fa-clock"></i>
-              {{ formatDate(log.createdAt) }}
-            </span>
-          </div>
+  <!-- List -->
+  @if (!loading && auditLogs.length > 0) {
+    <div class="audit-list d-flex flex-column gap-2">
+      @for (log of auditLogs; track log.id) {
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge rounded-pill px-3 py-2"
+                      [class.bg-success]="log.action === 'CREATE'"
+                      [class.bg-primary]="log.action === 'UPDATE'"
+                      [class.bg-danger]="log.action === 'DELETE'">
+                  <i [class]="getActionIcon(log.action)"></i>
+                  {{ getActionText(log.action) }}
+                </span>
+                <span class="text-muted small">
+                  <i class="fas fa-user me-1"></i>
+                  {{ log.userEmail || 'Usuario' }}
+                </span>
+              </div>
+              <small class="text-muted">
+                <i class="far fa-clock me-1"></i>
+                {{ formatDate(log.createdAt) }}
+              </small>
+            </div>
 
-          <div *ngIf="showFullHistory && log.changes" class="audit-changes">
-            <!-- Mostrar cambios detallados -->
-            <div *ngIf="log.action === 'UPDATE' && log.changes.before && log.changes.after">
-              <div class="change-group">
-                <h6>Cambios realizados:</h6>
-                <div *ngFor="let key of getObjectKeys(log.changes.before)"
-                     class="change-row">
-                  <div *ngIf="log.changes.before[key] !== log.changes.after[key]">
-                    <span class="field-name">{{ key }}:</span>
-                    <span class="old-value">{{ log.changes.before[key] }}</span>
-                    <span class="arrow">→</span>
-                    <span class="new-value">{{ log.changes.after[key] }}</span>
-                  </div>
+            <!-- Update Changes -->
+            @if (log.action === 'UPDATE' && log.changes.before && log.changes.after) {
+              <div class="mt-2 pt-2 border-top">
+                <small class="text-muted d-block mb-1 fw-semibold">Cambios realizados:</small>
+                <div class="bg-light p-2 rounded">
+                  @for (key of getChangedFields(log.changes); track key) {
+                    <div class="d-flex align-items-center gap-2 small py-1">
+                      <span class="fw-semibold text-secondary" style="min-width: 80px;">{{ key }}:</span>
+                      <span class="text-danger text-decoration-line-through">{{ getValue(log.changes.before[key]) }}</span>
+                      <span class="text-muted">→</span>
+                      <span class="text-success fw-semibold">{{ getValue(log.changes.after[key]) }}</span>
+                    </div>
+                  }
                 </div>
               </div>
-            </div>
+            }
 
-            <div *ngIf="log.action === 'CREATE' && log.changes.after">
-              <div class="change-group">
-                <h6>Datos creados:</h6>
-                <!-- <pre>{{ log.changes.after | json }}</pre> -->
+            <!-- Create -->
+            @if (log.action === 'CREATE' && log.changes.after) {
+              <div class="mt-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                  <i class="fas fa-plus-circle me-1"></i>
+                  Registro creado
+                </span>
               </div>
-            </div>
-          </div>
+            }
 
-          <div *ngIf="!showFullHistory" class="audit-summary">
-            <span class="text-muted">
-              {{ log.action === 'UPDATE' ? 'Registro actualizado' :
-                 log.action === 'CREATE' ? 'Registro creado' : 'Registro eliminado' }}
-            </span>
+            <!-- Delete -->
+            @if (log.action === 'DELETE' && log.changes.before) {
+              <div class="mt-2">
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                  <i class="fas fa-trash-alt me-1"></i>
+                  Registro eliminado
+                </span>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
-  </div>
+  }
 
-  <!-- Paginación -->
-  <div *ngIf="totalPages > 1" class="pagination-container">
-    <nav aria-label="Historial de cambios">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <button class="page-link" (click)="changePage(currentPage - 1)">
-            Anterior
-          </button>
-        </li>
-        <li *ngFor="let page of getPages()"
-            class="page-item"
-            [class.active]="page === currentPage">
-          <button class="page-link" (click)="changePage(page)">
-            {{ page }}
-          </button>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <button class="page-link" (click)="changePage(currentPage + 1)">
-            Siguiente
-          </button>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  <!-- Pagination -->
+  @if (totalPages > 1) {
+    <div class="mt-3 pt-2 border-top d-flex justify-content-center">
+      <nav aria-label="Navegación de historial">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="changePage(currentPage - 1)">
+              <i class="fas fa-chevron-left"></i>
+              <span class="d-none d-sm-inline ms-1">Anterior</span>
+            </button>
+          </li>
+          @for (page of getPages(); track page) {
+            <li class="page-item" [class.active]="page === currentPage">
+              <button class="page-link" (click)="changePage(page)">{{ page }}</button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="changePage(currentPage + 1)">
+              <span class="d-none d-sm-inline me-1">Siguiente</span>
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  }
 </div>
